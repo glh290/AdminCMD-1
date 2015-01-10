@@ -29,6 +29,7 @@
     </build>
     <modules>
         <module>core</module>
+        <module>api</module>
     </modules>
     <dependencies>
         <!-- Spigot has the same API as Bukkit -->
