@@ -16,47 +16,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.core.world;
+package com.admincmd.bukkit;
 
+import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
-import com.admincmd.api.world.Location;
-import com.admincmd.api.world.World;
 import com.admincmd.core.AdminCMD;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * <strong>Project:</strong> core <br>
- * <strong>File:</strong> ACWorld.java
+ * <strong>Project:</strong> AdminCMD-Core <br>
+ * <strong>File:</strong> BukkitPlugin.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class ACWorld implements World {
+public class BukkitPlugin extends JavaPlugin implements ACPlugin {
 
-    private final String name;
-
-    public ACWorld(String name) {
-        this.name = name;
+    @Override
+    public void onEnable() {
+        AdminCMD.registerACPlugin(this);
+        AdminCMD.onEnable();
     }
 
     @Override
-    public Location getSpawnLocation() {
-        Location loc = null;
-
-        if (AdminCMD.getACPlugin().getServerSoftware() == ServerSoftware.BUKKIT) {
-            org.bukkit.World world = org.bukkit.Bukkit.getServer().getWorld(name);
-            loc = new Location(world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockY(), world.getSpawnLocation().getBlockZ(), world.getSpawnLocation().getYaw(), world.getSpawnLocation().getPitch(), this);
-        } else if (AdminCMD.getACPlugin().getServerSoftware() == ServerSoftware.SPONGE) {
-        }
-
-        return loc;
+    public void onDisable() {
+        AdminCMD.onDisable();
     }
 
     @Override
-    public void setSpawnLocation() {
+    public ServerSoftware getServerSoftware() {
+        return ServerSoftware.BUKKIT;
     }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
 }

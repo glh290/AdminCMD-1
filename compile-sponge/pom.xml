@@ -6,13 +6,12 @@
         <artifactId>AdminCMD-Rebirth</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>Compile</artifactId>
+    <artifactId>compile-sponge</artifactId>
     <packaging>jar</packaging>
     
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>AdminCMD</finalName>
-        <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
         <plugins>            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -31,6 +30,7 @@
                                     <include>com.admincmd:api</include>
                                     <include>com.admincmd:core</include>
                                     <include>com.admincmd:plugin</include>
+                                    <include>com.admincmd:sponge</include>
                                     <include>org.xerial:sqlite-jdbc</include>
                                     <include>org.yaml:snakeyaml</include>
                                     <include>mysql:mysql-connector-java</include>
@@ -59,6 +59,12 @@
         <dependency>
             <groupId>com.admincmd</groupId>
             <artifactId>plugin</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.admincmd</groupId>
+            <artifactId>sponge</artifactId>
             <version>${parent.version}</version>
         </dependency>
     </dependencies>

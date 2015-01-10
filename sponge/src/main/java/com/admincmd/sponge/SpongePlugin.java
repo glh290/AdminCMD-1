@@ -16,15 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.core.plugin;
+package com.admincmd.sponge;
 
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.AdminCMD;
-import com.admincmd.core.Config;
-import com.admincmd.core.database.DatabaseFactory;
 import java.io.File;
-import java.sql.SQLException;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartingEvent;
@@ -40,49 +37,32 @@ import org.spongepowered.api.util.event.Subscribe;
  */
 @Plugin(id = "AC", name = "AdminCMD", version = "1.0.0")
 public class SpongePlugin implements ACPlugin {
-
+    
     private Game game;
-
+    
     @Subscribe
     public void onPreInitialization(PreInitializationEvent event) {
-        this.game = event.getGame();
-        onPluginEnable();
-
+        AdminCMD.registerACPlugin(this);
+        AdminCMD.onEnable();
+        
     }
-
+    
     @Subscribe
     public void onServerStarting(ServerStartingEvent event) {
     }
-
+    
     @Subscribe
     public void onServerStopping(ServerStoppingEvent event) {
-        onPluginDisable();
+        AdminCMD.onDisable();
     }
-
-    @Override
-    public void onPluginEnable() {
-        AdminCMD.registerACPlugin(this);
-        Config.load();
-        DatabaseFactory.init();
-        //enabling code here
-    }
-
-    @Override
-    public void onPluginDisable() {
-        try {
-            DatabaseFactory.getDatabase().closeConnection();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
+    
     @Override
     public File getDataFolder() {
         File folder = new File(".//" + File.separator + "AdminCMD");
         folder.mkdirs();
         return folder;
     }
-
+    
     @Override
     public ServerSoftware getServerSoftware() {
         return ServerSoftware.SPONGE;

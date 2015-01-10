@@ -19,6 +19,8 @@
 package com.admincmd.core;
 
 import com.admincmd.api.plugin.ACPlugin;
+import com.admincmd.core.database.DatabaseFactory;
+import java.sql.SQLException;
 
 /**
  * <strong>Project:</strong> core <br>
@@ -36,6 +38,19 @@ public class AdminCMD {
 
     public static ACPlugin getACPlugin() {
         return acp;
+    }
+
+    public static void onEnable() {
+        //TODO: Load config
+        DatabaseFactory.init();
+    }
+
+    public static void onDisable() {
+        try {
+            DatabaseFactory.getDatabase().closeConnection();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

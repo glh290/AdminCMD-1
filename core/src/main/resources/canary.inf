@@ -1,3 +1,0 @@
-main-class=com.admincmd.core.plugin.CanaryPlugin
-name=${project.artifactId}
-version=${project.version}

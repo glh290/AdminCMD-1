@@ -28,12 +28,8 @@ import java.io.File;
  */
 public interface ACPlugin {
 
-    public void onPluginEnable();
-
-    public void onPluginDisable();
-    
     public File getDataFolder();
-    
+
     public ServerSoftware getServerSoftware();
 
 }
