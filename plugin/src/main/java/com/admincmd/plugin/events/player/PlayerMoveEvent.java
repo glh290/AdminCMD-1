@@ -18,6 +18,12 @@
  */
 package com.admincmd.plugin.events.player;
 
+import com.admincmd.api.entity.Player;
+
 public class PlayerMoveEvent extends PlayerEvent {
+
+    public PlayerMoveEvent(Player p) {
+        super(p);
+    }
 
 }

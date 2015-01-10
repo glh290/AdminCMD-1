@@ -18,6 +18,12 @@
  */
 package com.admincmd.plugin.events.player;
 
+import com.admincmd.api.entity.Player;
+
 public class PlayerItemPickupEvent extends PlayerEvent {
+
+    public PlayerItemPickupEvent(Player p) {
+        super(p);
+    }
 
 }

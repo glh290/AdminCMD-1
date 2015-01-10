@@ -18,6 +18,12 @@
  */
 package com.admincmd.plugin.events.player;
 
+import com.admincmd.api.entity.Player;
+
 public class PlayerRespawnEvent extends PlayerEvent {
+
+    public PlayerRespawnEvent(Player p) {
+        super(p);
+    }
 
 }

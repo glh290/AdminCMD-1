@@ -18,9 +18,19 @@
  */
 package com.admincmd.plugin.events.player;
 
+import com.admincmd.api.entity.Player;
 import com.admincmd.api.event.Event;
 
 
 public abstract class PlayerEvent implements Event {
     
+    private final Player p;
+
+    public PlayerEvent(Player p) {
+        this.p = p;
+    }
+
+    public Player getP() {
+        return p;
+    }
 }
