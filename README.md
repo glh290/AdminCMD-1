@@ -1,6 +1,6 @@
 ![Logo](http://img401.imageshack.us/img401/6918/admincmdlogobig.png)
 
-Unleash the power of Sponge!
+Unleash the power of Sponge and Bukkit!
 
 Informations
 ------------
