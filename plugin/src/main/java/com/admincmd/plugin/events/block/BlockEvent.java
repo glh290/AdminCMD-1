@@ -16,8 +16,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.entity;
+package com.admincmd.plugin.events.block;
 
-public interface Player extends Entity {
+import com.admincmd.api.block.Block;
+import com.admincmd.api.event.Event;
+
+public abstract class BlockEvent implements Event {
+
+    private final Block b;
+
+    public BlockEvent(Block b) {
+        this.b = b;
+    }
+
+    /**
+     * Get the block
+     *
+     * @return
+     */
+    public Block getBlock() {
+        return b;
+    }
+
+    /**
+     * Set the block
+     *
+     * @param b
+     */
+    public void setBlock(Block b) {
+
+    }
 
 }

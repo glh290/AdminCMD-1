@@ -16,8 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.entity;
+package com.admincmd.plugin.util.configuration;
 
-public interface Player extends Entity {
+public interface Configuration {
+
+    public void set();
+
+    public void get();
+
+    public boolean contains();
+
+    public void save();
 
 }

@@ -16,8 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.entity;
+package com.admincmd.plugin.events.player;
 
-public interface Player extends Entity {
+public class PlayerKickEvent {
 
 }
