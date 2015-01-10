@@ -16,32 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.plugin.addons;
-
-import com.admincmd.core.AdminCMD;
-import com.admincmd.plugin.addons.Addon;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+package com.admincmd.api.addon;
 
 /**
- * <strong>Project:</strong> core <br>
- * <strong>File:</strong> AddonManager.java
- *
+ * <strong>Project:</strong> api <br>
+ * <strong>File:</strong> Addon.java
+ * 
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class AddonManager {
-
-    private static Map<String, Addon> addons;
-
-    public static void init() {
-        addons = new HashMap<>();
-        File addonFolder = new File(AdminCMD.getACPlugin().getDataFolder(), "addons");
-        addonFolder.mkdirs();
-
-        for (File jarFile : addonFolder.listFiles()) {
-            if (!jarFile.getName().endsWith(".jar") || !jarFile.isFile()) continue;
-        }
-    }
+public interface Addon {
 
 }

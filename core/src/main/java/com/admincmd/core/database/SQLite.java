@@ -16,46 +16,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.plugin.util.database;
+package com.admincmd.core.database;
 
 import com.admincmd.api.database.Database;
+import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.sqlite.JDBC;
 
 /**
  * <strong>Project:</strong> plugin <br>
- * <strong>File:</strong> MySQL.java
+ * <strong>File:</strong> SQLite.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class MySQL extends Database {
+public class SQLite extends Database {
 
-    private final String host, user, password, dbName;
-    private final int port;
+    private final File dbFile;
 
     /**
-     * Creates a new instance for MySQL databases.
-     * Statements are done by {@link de.thejeterlp.bukkit.bukkittools.database.MySQL#executeStatement(java.lang.String) }
+     * Creates a new instance for SQLite databases.
      *
-     * @param host the host where the mysql server is on.
-     * @param user the username of the database-account
-     * @param password the password of the suer for the database account
-     * @param dbName the name of the database
-     * @param port the port of the database server
+     * @param dbFile Database file
      */
-    public MySQL(String host, String user, String password, String dbName, int port) {
-        super("org.gjt.mm.mysql.Driver");
-        this.host = host;
-        this.user = user;
-        this.password = password;
-        this.dbName = dbName;
-        this.port = port;
+    public SQLite(File dbFile) {       
+        super("org.sqlite.JDBC");
+        dbFile.getParentFile().mkdirs();
+        this.dbFile = dbFile;
     }
 
     @Override
     public void reactivateConnection() throws SQLException {
-        String dsn = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
-        setConnection(DriverManager.getConnection(dsn, user, password));
+        setConnection(DriverManager.getConnection("jdbc:sqlite://" + dbFile.getAbsolutePath()));
     }
 
 }

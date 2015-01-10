@@ -22,7 +22,7 @@ import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.AdminCMD;
 import com.admincmd.core.Config;
-import com.admincmd.plugin.util.database.DatabaseFactory;
+import com.admincmd.core.database.DatabaseFactory;
 import java.sql.SQLException;
 import org.bukkit.plugin.java.JavaPlugin;
 

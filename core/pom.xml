@@ -15,11 +15,5 @@
             <artifactId>api</artifactId>
             <version>${parent.version}</version>           
         </dependency>
-        
-        <dependency>
-            <groupId>com.admincmd</groupId>
-            <artifactId>plugin</artifactId>
-            <version>${parent.version}</version>           
-        </dependency>
     </dependencies>
 </project>
