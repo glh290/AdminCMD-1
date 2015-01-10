@@ -13,40 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.admincmd.core.plugin;
-
-import com.admincmd.api.plugin.ACPlugin;
-import com.admincmd.api.plugin.ServerSoftware;
-import org.bukkit.plugin.java.JavaPlugin;
+package com.admincmd.api.plugin;
 
 /**
  * <strong>Project:</strong> AdminCMD-Core <br>
- * <strong>File:</strong> BukkitPlugin.java
+ * <strong>File:</strong> ServerSoftware.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class BukkitPlugin extends JavaPlugin implements ACPlugin {
+public enum ServerSoftware {
 
-    private IACPlugin acp;
+    BUKKIT,
+    SPONGE,
+    CANARY;
 
-    @Override
-    public void onEnable() {  
-        acp = new IACPlugin(this, ServerSoftware.BUKKIT);
-        acp.onPluginEnable();
-    }
-
-    @Override
-    public void onDisable() {
-        acp.onPluginDisable();
-    }
-
-    @Override
-    public void onPluginEnable() {
-        //enabling code here
-    }
-
-    @Override
-    public void onPluginDisable() {
-        //disabling code here
-    }
 }

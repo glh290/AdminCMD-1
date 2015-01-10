@@ -15,8 +15,8 @@
  */
 package com.admincmd.core;
 
+import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.core.plugin.IACPlugin;
-import com.admincmd.plugin.ACPlugin;
 
 /**
  * <strong>Project:</strong> core <br>

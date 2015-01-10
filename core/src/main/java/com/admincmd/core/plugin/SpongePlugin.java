@@ -15,8 +15,8 @@
  */
 package com.admincmd.core.plugin;
 
-import com.admincmd.plugin.ACPlugin;
-import com.admincmd.plugin.ServerSoftware;
+import com.admincmd.api.plugin.ACPlugin;
+import com.admincmd.api.plugin.ServerSoftware;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartingEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
@@ -36,7 +36,7 @@ public class SpongePlugin implements ACPlugin {
 
     @Subscribe
     public void onPreInitialization(PreInitializationEvent event) {
-        acp = new IACPlugin(this, ServerSoftware.CANARY);
+        acp = new IACPlugin(this, ServerSoftware.SPONGE);
         acp.onPluginEnable();
 
     }

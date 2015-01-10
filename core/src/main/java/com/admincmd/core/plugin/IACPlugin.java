@@ -15,8 +15,8 @@
  */
 package com.admincmd.core.plugin;
 
-import com.admincmd.plugin.ACPlugin;
-import com.admincmd.plugin.ServerSoftware;
+import com.admincmd.api.plugin.ACPlugin;
+import com.admincmd.api.plugin.ServerSoftware;
 
 /**
  * <strong>Project:</strong> AdminCMD-Core <br>
