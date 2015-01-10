@@ -29,7 +29,6 @@
                                 <includes>
                                     <include>com.admincmd:api</include>
                                     <include>com.admincmd:core</include>
-                                    <include>com.admincmd:plugin</include>
                                     <include>com.admincmd:bukkit</include>
                                     <include>org.xerial:sqlite-jdbc</include>
                                     <include>org.yaml:snakeyaml</include>
@@ -55,13 +54,7 @@
             <artifactId>core</artifactId>
             <version>${parent.version}</version>
         </dependency>
-        
-        <dependency>
-            <groupId>com.admincmd</groupId>
-            <artifactId>plugin</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
-        
+                
         <dependency>
             <groupId>com.admincmd</groupId>
             <artifactId>bukkit</artifactId>
