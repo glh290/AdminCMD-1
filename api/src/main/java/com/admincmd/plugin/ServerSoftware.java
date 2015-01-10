@@ -13,39 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.admincmd.core.player;
-
-import com.admincmd.api.player.Player;
-import java.util.UUID;
-import org.bukkit.Location;
+package com.admincmd.plugin;
 
 /**
  * <strong>Project:</strong> AdminCMD-Core <br>
- * <strong>File:</strong> IPlayer.java
+ * <strong>File:</strong> ServerSoftware.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class IPlayer implements Player {
+public enum ServerSoftware {
 
-    public IPlayer(String name, UUID uuid) {
-        this.name = name;
-        this.uuid = uuid;
-    }
+    BUKKIT,
+    SPONGE,
+    CANARY;
 
-    private final String name;
-    private final UUID uuid;
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return this.uuid;
-    }
-
-    @Override
-    public void teleport(Location loc) {
-    }
 }

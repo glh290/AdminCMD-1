@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.admincmd.api;
+package com.admincmd.core.plugin;
 
-import com.admincmd.api.player.Player;
-import com.admincmd.core.IACPlugin;
-import com.admincmd.core.ServerSoftware;
-import java.util.UUID;
+import com.admincmd.plugin.ACPlugin;
+import com.admincmd.plugin.ServerSoftware;
 
 /**
  * <strong>Project:</strong> AdminCMD-Core <br>
- * <strong>File:</strong> ACPlugin.java
+ * <strong>File:</strong> IACPlugin.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class ACPlugin implements IACPlugin {
+public class IACPlugin implements ACPlugin {
 
-    private final IACPlugin plugin;
+    private final ACPlugin plugin;
     private static ACPlugin INSTANCE;
     private final ServerSoftware software;
 
-    public ACPlugin(IACPlugin plugin, ServerSoftware software) {
+    public IACPlugin(ACPlugin plugin, ServerSoftware software) {
         INSTANCE = this;
         this.plugin = plugin;
         this.software = software;
@@ -55,10 +53,4 @@ public class ACPlugin implements IACPlugin {
     public static ACPlugin getInstance() {
         return INSTANCE;
     }
-
-    @Override
-    public Player getPlayer(UUID uuid) {
-        return plugin.getPlayer(uuid);
-    }
-
 }

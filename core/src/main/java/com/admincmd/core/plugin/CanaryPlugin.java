@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.admincmd.core;
+package com.admincmd.core.plugin;
 
-import com.admincmd.api.ACPlugin;
-import com.admincmd.api.player.Player;
-import java.util.UUID;
+import com.admincmd.plugin.ACPlugin;
+import com.admincmd.plugin.ServerSoftware;
 import net.canarymod.plugin.Plugin;
 
 /**
@@ -27,13 +26,13 @@ import net.canarymod.plugin.Plugin;
  * 
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class CanaryPlugin extends Plugin implements IACPlugin {
+public class CanaryPlugin extends Plugin implements ACPlugin {
 
-    private ACPlugin acp;
+    private IACPlugin acp;
     
     @Override
     public boolean enable() {
-        acp = new ACPlugin(this, ServerSoftware.CANARY);
+        acp = new IACPlugin(this, ServerSoftware.CANARY);
         acp.onPluginEnable();
         return true;
     }
@@ -52,10 +51,4 @@ public class CanaryPlugin extends Plugin implements IACPlugin {
     public void onPluginDisable() {
         //disabling code here
     }
-
-    @Override
-    public Player getPlayer(UUID uuid) {
-        return null;
-    }
-
 }

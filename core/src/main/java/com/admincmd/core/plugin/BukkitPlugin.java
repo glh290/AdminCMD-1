@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.admincmd.core;
+package com.admincmd.core.plugin;
 
-import com.admincmd.api.ACPlugin;
-import com.admincmd.api.player.Player;
-import com.admincmd.core.player.IPlayer;
+import com.admincmd.plugin.ACPlugin;
+import com.admincmd.plugin.ServerSoftware;
 import java.util.UUID;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,13 +26,13 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class BukkitPlugin extends JavaPlugin implements IACPlugin {
+public class BukkitPlugin extends JavaPlugin implements ACPlugin {
 
-    private ACPlugin acp;
+    private IACPlugin acp;
 
     @Override
-    public void onEnable() {
-        acp = new ACPlugin(this, ServerSoftware.BUKKIT);
+    public void onEnable() {  
+        acp = new IACPlugin(this, ServerSoftware.BUKKIT);
         acp.onPluginEnable();
     }
 
@@ -51,11 +50,4 @@ public class BukkitPlugin extends JavaPlugin implements IACPlugin {
     public void onPluginDisable() {
         //disabling code here
     }
-
-    @Override
-    public Player getPlayer(UUID uuid) {
-        org.bukkit.entity.Player player = getServer().getPlayer(uuid);
-        return new IPlayer(player.getName(), player.getUniqueId());
-    }
-
 }

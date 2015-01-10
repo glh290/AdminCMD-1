@@ -15,21 +15,19 @@
  */
 package com.admincmd.core;
 
-import com.admincmd.api.player.Player;
-import java.util.UUID;
+import com.admincmd.core.plugin.IACPlugin;
+import com.admincmd.plugin.ACPlugin;
 
 /**
- * <strong>Project:</strong> AdminCMD-Core <br>
- * <strong>File:</strong> IACPlugin.java
+ * <strong>Project:</strong> core <br>
+ * <strong>File:</strong> AdminCMD.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public interface IACPlugin {
+public class AdminCMD {
 
-    public void onPluginEnable();
-
-    public void onPluginDisable();
-    
-    public Player getPlayer(UUID uuid);
+    public static ACPlugin getACPlugin() {
+        return IACPlugin.getInstance();
+    }
 
 }

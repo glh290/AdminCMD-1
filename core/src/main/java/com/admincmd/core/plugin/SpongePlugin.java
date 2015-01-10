@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.admincmd.core;
+package com.admincmd.core.plugin;
 
-import com.admincmd.api.ACPlugin;
-import com.admincmd.api.player.Player;
-import java.util.UUID;
+import com.admincmd.plugin.ACPlugin;
+import com.admincmd.plugin.ServerSoftware;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartingEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
@@ -31,13 +30,13 @@ import org.spongepowered.api.util.event.Subscribe;
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
 @Plugin(id = "AC", name = "AdminCMD", version = "1.0.0")
-public class SpongePlugin implements IACPlugin {
+public class SpongePlugin implements ACPlugin {
 
-    private ACPlugin acp;
+    private IACPlugin acp;
 
     @Subscribe
     public void onPreInitialization(PreInitializationEvent event) {
-        acp = new ACPlugin(this, ServerSoftware.CANARY);
+        acp = new IACPlugin(this, ServerSoftware.CANARY);
         acp.onPluginEnable();
 
     }
@@ -60,10 +59,4 @@ public class SpongePlugin implements IACPlugin {
     public void onPluginDisable() {
         //disabling code here
     }
-
-    @Override
-    public Player getPlayer(UUID uuid) {
-        return null;
-    }
-
 }

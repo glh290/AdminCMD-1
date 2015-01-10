@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.admincmd.core;
+package com.admincmd.plugin;
 
 /**
  * <strong>Project:</strong> AdminCMD-Core <br>
- * <strong>File:</strong> ServerSoftware.java
+ * <strong>File:</strong> ACPlugin.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public enum ServerSoftware {
+public interface ACPlugin {
 
-    BUKKIT,
-    SPONGE,
-    CANARY;
+    public void onPluginEnable();
+
+    public void onPluginDisable();
 
 }

@@ -6,6 +6,18 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
+    <distributionManagement>
+        <repository>
+            <id>plugin-releases</id>
+            <url>ftp://redthirddivision.com/subdomains/repo</url>
+        </repository> 
+        
+        <snapshotRepository>
+            <id>plugin-snapshots</id>
+            <url>ftp://redthirddivision.com/subdomains/repo</url>
+        </snapshotRepository>    
+    </distributionManagement>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -25,7 +37,15 @@
                     <include>**/*</include>
                 </includes>
             </resource>
-        </resources>      
+        </resources>    
+        
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>1.0-alpha-6</version>
+            </extension>
+        </extensions>  
     </build>
     <modules>
         <module>core</module>
@@ -66,6 +86,11 @@
         <repository>
             <id>vi-repo</id>
             <url>http://repo.visualillusionsent.net/repository/public</url>
+        </repository>
+        
+        <repository>
+            <id>R3D</id>
+            <url>http://repo.redthirddivision.com</url>
         </repository>
     </repositories>
 </project>
