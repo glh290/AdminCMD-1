@@ -47,10 +47,13 @@
             </extension>
         </extensions>  
     </build>
+    
     <modules>
         <module>core</module>
         <module>api</module>
+        <module>plugin</module>
     </modules>
+    
     <dependencies>
         <!-- Spigot has the same API as Bukkit -->
         <dependency>
