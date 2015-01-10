@@ -16,13 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.world;
+package com.admincmd.core;
 
-public interface World {
-    
-    public Location getSpawnLocation();
-    
-    public void setSpawnLocation();
-    
-    public String getName();
+import com.admincmd.api.Server;
+
+/**
+ * <strong>Project:</strong> core <br>
+ * <strong>File:</strong> ACServer.java
+ *
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class ACServer implements Server {
+
 }

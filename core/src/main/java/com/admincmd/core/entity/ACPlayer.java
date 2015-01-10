@@ -16,16 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.plugin.util.configuration;
+package com.admincmd.core.entity;
 
-public interface Configuration {
+import com.admincmd.api.entity.Player;
 
-    public void set();
-
-    public void get();
-
-    public boolean contains();
-
-    public void save();
+/**
+ * <strong>Project:</strong> core <br>
+ * <strong>File:</strong> ACPlayer.java
+ * 
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class ACPlayer implements Player {
 
 }

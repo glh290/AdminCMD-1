@@ -16,13 +16,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.world;
+package com.admincmd.core.block;
 
-public interface World {
-    
-    public Location getSpawnLocation();
-    
-    public void setSpawnLocation();
-    
-    public String getName();
+import com.admincmd.api.block.Block;
+import com.admincmd.api.world.Location;
+
+/**
+ * <strong>Project:</strong> core <br>
+ * <strong>File:</strong> ACBlock.java
+ * 
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class ACBlock implements Block {
+
+    @Override
+    public Location getLocation() {
+        return null;
+    }
+
 }
