@@ -30,7 +30,7 @@ public abstract class PlayerEvent implements Event {
         this.p = p;
     }
 
-    public Player getP() {
+    public Player getPlayer() {
         return p;
     }
 }

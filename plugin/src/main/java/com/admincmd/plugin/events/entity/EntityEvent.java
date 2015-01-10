@@ -18,8 +18,19 @@
  */
 package com.admincmd.plugin.events.entity;
 
+import com.admincmd.api.entity.Entity;
 import com.admincmd.api.event.Event;
 
-
 public abstract class EntityEvent implements Event {
+
+    private final Entity e;
+
+    public EntityEvent(Entity e) {
+        this.e = e;
+    }
+
+    public Entity getEntity() {
+        return e;
+    }
+
 }

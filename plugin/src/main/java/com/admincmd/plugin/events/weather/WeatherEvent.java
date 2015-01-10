@@ -19,7 +19,22 @@
 package com.admincmd.plugin.events.weather;
 
 import com.admincmd.api.event.Event;
+import com.admincmd.api.world.Weather;
 
 public abstract class WeatherEvent implements Event {
+
+    private Weather w;
+
+    public WeatherEvent(Weather w) {
+        this.w = w;
+    }
+
+    public Weather getWeather() {
+        return w;
+    }
+
+    public void setWeather(Weather w) {
+        this.w = w;
+    }
 
 }

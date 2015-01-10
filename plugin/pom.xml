@@ -30,6 +30,9 @@
                                 <includes>
                                     <include>com.admincmd:api</include>
                                     <include>com.admincmd:core</include>
+                                    <include>org.xerial:sqlite-jdbc</include>
+                                    <include>org.yaml:snakeyaml</include>
+                                    <include>mysql:mysql-connector-java</include>
                                 </includes>
                             </artifactSet>                           
                         </configuration>

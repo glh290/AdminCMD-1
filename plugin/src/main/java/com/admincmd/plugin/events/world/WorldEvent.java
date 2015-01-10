@@ -19,7 +19,17 @@
 package com.admincmd.plugin.events.world;
 
 import com.admincmd.api.event.Event;
+import com.admincmd.api.world.World;
 
 public abstract class WorldEvent implements Event {
+    
+    private final World w;
 
+    public WorldEvent(World w) {
+        this.w = w;
+    }
+
+    public World getWorld() {
+        return w;
+    }
 }

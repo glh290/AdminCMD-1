@@ -20,6 +20,9 @@ package com.admincmd.core.plugin;
 
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
+import com.admincmd.core.AdminCMD;
+import java.io.File;
+import org.spongepowered.api.Game;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartingEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
@@ -35,12 +38,12 @@ import org.spongepowered.api.util.event.Subscribe;
 @Plugin(id = "AC", name = "AdminCMD", version = "1.0.0")
 public class SpongePlugin implements ACPlugin {
 
-    private IACPlugin acp;
+    private Game game;
 
     @Subscribe
     public void onPreInitialization(PreInitializationEvent event) {
-        acp = new IACPlugin(this, ServerSoftware.SPONGE);
-        acp.onPluginEnable();
+        this.game = event.getGame();
+        onPluginEnable();
 
     }
 
@@ -50,16 +53,29 @@ public class SpongePlugin implements ACPlugin {
 
     @Subscribe
     public void onServerStopping(ServerStoppingEvent event) {
-        acp.onPluginDisable();
+        onPluginDisable();
     }
 
     @Override
     public void onPluginEnable() {
+        AdminCMD.registerACPlugin(this);
         //enabling code here
     }
 
     @Override
     public void onPluginDisable() {
         //disabling code here
+    }
+
+    @Override
+    public File getDataFolder() {
+        File folder = new File(".//" + File.separator + "AdminCMD");
+        folder.mkdirs();
+        return folder;
+    }
+
+    @Override
+    public ServerSoftware getServerSoftware() {
+        return ServerSoftware.SPONGE;
     }
 }

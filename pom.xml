@@ -73,6 +73,25 @@
             <artifactId>CanaryLib</artifactId>
             <version>1.2.0-SNAPSHOT</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.7.2</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.15-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+        </dependency>
+
     </dependencies>
     
     <repositories>
@@ -94,6 +113,11 @@
         <repository>
             <id>R3D</id>
             <url>http://repo.redthirddivision.com</url>
+        </repository>
+        
+        <repository>
+            <id>Sonatype-public</id>
+            <url>http://oss.sonatype.org/content/groups/public/</url>
         </repository>
     </repositories>
 </project>

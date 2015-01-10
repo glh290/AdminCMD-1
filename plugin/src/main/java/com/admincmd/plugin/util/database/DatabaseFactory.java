@@ -18,6 +18,12 @@
  */
 package com.admincmd.plugin.util.database;
 
+import com.admincmd.api.database.Database;
+
 public class DatabaseFactory {
+    
+    private Database db;
+    
+    
 
 }

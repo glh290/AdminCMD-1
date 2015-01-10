@@ -18,6 +18,12 @@
  */
 package com.admincmd.plugin.events.weather;
 
+import com.admincmd.api.world.Weather;
+
 public class WeatherChangeEvent extends WeatherEvent {
+
+    public WeatherChangeEvent(Weather w) {
+        super(w);
+    }
 
 }

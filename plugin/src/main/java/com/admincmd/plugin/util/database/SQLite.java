@@ -18,6 +18,35 @@
  */
 package com.admincmd.plugin.util.database;
 
-public abstract class Database {
+import com.admincmd.api.database.Database;
+import java.io.File;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ * <strong>Project:</strong> plugin <br>
+ * <strong>File:</strong> SQLite.java
+ *
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class SQLite extends Database {
+
+    private final File dbFile;
+
+    /**
+     * Creates a new instance for SQLite databases.
+     *
+     * @param dbFile Database file
+     */
+    public SQLite(File dbFile) {
+        super("org.sqlite.JDBC");
+        dbFile.getParentFile().mkdirs();
+        this.dbFile = dbFile;
+    }
+
+    @Override
+    public void reactivateConnection() throws SQLException {
+        setConnection(DriverManager.getConnection("jdbc:sqlite://" + dbFile.getAbsolutePath()));
+    }
 
 }

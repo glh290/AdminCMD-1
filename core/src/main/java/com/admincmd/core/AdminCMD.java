@@ -19,7 +19,6 @@
 package com.admincmd.core;
 
 import com.admincmd.api.plugin.ACPlugin;
-import com.admincmd.core.plugin.IACPlugin;
 
 /**
  * <strong>Project:</strong> core <br>
@@ -29,8 +28,14 @@ import com.admincmd.core.plugin.IACPlugin;
  */
 public class AdminCMD {
 
+    private static ACPlugin acp;
+
+    public static void registerACPlugin(ACPlugin acp) {
+        AdminCMD.acp = acp;
+    }
+
     public static ACPlugin getACPlugin() {
-        return IACPlugin.getInstance();
+        return acp;
     }
 
 }

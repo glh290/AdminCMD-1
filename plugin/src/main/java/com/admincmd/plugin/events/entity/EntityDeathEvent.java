@@ -18,6 +18,12 @@
  */
 package com.admincmd.plugin.events.entity;
 
+import com.admincmd.api.entity.Entity;
+
 public class EntityDeathEvent extends EntityEvent {
+
+    public EntityDeathEvent(Entity e) {
+        super(e);
+    }
     
 }

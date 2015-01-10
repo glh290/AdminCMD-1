@@ -18,6 +18,12 @@
  */
 package com.admincmd.plugin.events.world;
 
+import com.admincmd.api.world.World;
+
 public class WorldLoadEvent extends WorldEvent  {
+
+    public WorldLoadEvent(World w) {
+        super(w);
+    }
 
 }

@@ -18,6 +18,12 @@
  */
 package com.admincmd.plugin.events.entity;
 
+import com.admincmd.api.entity.Entity;
+
 public class EntitySpawnEvent extends EntityEvent {
+
+    public EntitySpawnEvent(Entity e) {
+        super(e);
+    }
     
 }

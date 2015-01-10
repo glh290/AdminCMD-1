@@ -16,41 +16,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.core.plugin;
+package com.admincmd.plugin.addons;
 
-import com.admincmd.api.plugin.ACPlugin;
-import com.admincmd.api.plugin.ServerSoftware;
-import net.canarymod.plugin.Plugin;
+import com.admincmd.core.AdminCMD;
+import com.admincmd.plugin.addons.Addon;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * <strong>Project:</strong> AdminCMD-Core <br>
- * <strong>File:</strong> CanaryPlugin.java
+ * <strong>Project:</strong> core <br>
+ * <strong>File:</strong> AddonManager.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class CanaryPlugin extends Plugin implements ACPlugin {
+public class AddonManager {
 
-    private IACPlugin acp;
+    private static Map<String, Addon> addons;
 
-    @Override
-    public boolean enable() {
-        acp = new IACPlugin(this, ServerSoftware.CANARY);
-        acp.onPluginEnable();
-        return true;
+    public static void init() {
+        addons = new HashMap<>();
+        File addonFolder = new File(AdminCMD.getACPlugin().getDataFolder(), "addons");
+        addonFolder.mkdirs();
+
+        for (File jarFile : addonFolder.listFiles()) {
+            if (!jarFile.getName().endsWith(".jar") || !jarFile.isFile()) continue;
+        }
     }
 
-    @Override
-    public void disable() {
-        acp.onPluginDisable();
-    }
-
-    @Override
-    public void onPluginEnable() {
-        //enabling code here
-    }
-
-    @Override
-    public void onPluginDisable() {
-        //disabling code here
-    }
 }

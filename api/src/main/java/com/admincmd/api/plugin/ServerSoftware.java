@@ -27,7 +27,6 @@ package com.admincmd.api.plugin;
 public enum ServerSoftware {
 
     BUKKIT,
-    SPONGE,
-    CANARY;
+    SPONGE;
 
 }

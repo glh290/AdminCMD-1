@@ -18,6 +18,8 @@
  */
 package com.admincmd.api.plugin;
 
+import java.io.File;
+
 /**
  * <strong>Project:</strong> AdminCMD-Core <br>
  * <strong>File:</strong> ACPlugin.java
@@ -29,5 +31,9 @@ public interface ACPlugin {
     public void onPluginEnable();
 
     public void onPluginDisable();
+    
+    public File getDataFolder();
+    
+    public ServerSoftware getServerSoftware();
 
 }

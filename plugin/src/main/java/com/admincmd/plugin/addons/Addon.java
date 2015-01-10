@@ -18,5 +18,8 @@
  */
 package com.admincmd.plugin.addons;
 
-public interface Addon {
+public class Addon {
+    
+    
+    
 }

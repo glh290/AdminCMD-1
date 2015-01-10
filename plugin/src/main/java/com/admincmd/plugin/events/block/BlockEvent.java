@@ -23,7 +23,7 @@ import com.admincmd.api.event.Event;
 
 public abstract class BlockEvent implements Event {
 
-    private final Block b;
+    private Block b;
 
     public BlockEvent(Block b) {
         this.b = b;
@@ -44,7 +44,7 @@ public abstract class BlockEvent implements Event {
      * @param b
      */
     public void setBlock(Block b) {
-
+        this.b = b;
     }
 
 }

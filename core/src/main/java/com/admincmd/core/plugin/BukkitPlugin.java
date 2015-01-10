@@ -20,6 +20,7 @@ package com.admincmd.core.plugin;
 
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
+import com.admincmd.core.AdminCMD;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -30,26 +31,28 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class BukkitPlugin extends JavaPlugin implements ACPlugin {
 
-    private IACPlugin acp;
-
     @Override
-    public void onEnable() {  
-        acp = new IACPlugin(this, ServerSoftware.BUKKIT);
-        acp.onPluginEnable();
+    public void onEnable() {
+        onPluginEnable();
     }
 
     @Override
     public void onDisable() {
-        acp.onPluginDisable();
+        onPluginDisable();
     }
 
     @Override
     public void onPluginEnable() {
-        //enabling code here
+        AdminCMD.registerACPlugin(this);
     }
 
     @Override
     public void onPluginDisable() {
         //disabling code here
+    }
+
+    @Override
+    public ServerSoftware getServerSoftware() {
+        return ServerSoftware.BUKKIT;
     }
 }

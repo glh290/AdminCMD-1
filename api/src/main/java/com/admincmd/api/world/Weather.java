@@ -16,44 +16,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.core.plugin;
-
-import com.admincmd.api.plugin.ACPlugin;
-import com.admincmd.api.plugin.ServerSoftware;
+package com.admincmd.api.world;
 
 /**
- * <strong>Project:</strong> AdminCMD-Core <br>
- * <strong>File:</strong> IACPlugin.java
+ * <strong>Project:</strong> api <br>
+ * <strong>File:</strong> Weather.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class IACPlugin implements ACPlugin {
+public enum Weather {
 
-    private final ACPlugin plugin;
-    private static ACPlugin INSTANCE;
-    private final ServerSoftware software;
+    SUN,
+    RAIN;
 
-    public IACPlugin(ACPlugin plugin, ServerSoftware software) {
-        INSTANCE = this;
-        this.plugin = plugin;
-        this.software = software;
-    }
-
-    @Override
-    public void onPluginEnable() {
-        plugin.onPluginEnable();
-    }
-
-    @Override
-    public void onPluginDisable() {
-        plugin.onPluginDisable();
-    }
-
-    public ServerSoftware getServerSoftware() {
-        return this.software;
-    }
-
-    public static ACPlugin getInstance() {
-        return INSTANCE;
-    }
 }
