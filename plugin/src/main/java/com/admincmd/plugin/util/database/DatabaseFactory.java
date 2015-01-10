@@ -19,11 +19,26 @@
 package com.admincmd.plugin.util.database;
 
 import com.admincmd.api.database.Database;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import org.gjt.mm.mysql.Driver;
+import org.sqlite.JDBC;
 
 public class DatabaseFactory {
     
     private Database db;
     
+    public static void init() {
+        try {
+            DriverManager.registerDriver(new JDBC());
+            DriverManager.registerDriver(new Driver());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        //TODO: Config implementation
+        boolean mysql = true;
+        
+    }
     
-
 }

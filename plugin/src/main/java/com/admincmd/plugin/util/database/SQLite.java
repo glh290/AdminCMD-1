@@ -22,6 +22,7 @@ import com.admincmd.api.database.Database;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.sqlite.JDBC;
 
 /**
  * <strong>Project:</strong> plugin <br>
@@ -38,7 +39,7 @@ public class SQLite extends Database {
      *
      * @param dbFile Database file
      */
-    public SQLite(File dbFile) {
+    public SQLite(File dbFile) {       
         super("org.sqlite.JDBC");
         dbFile.getParentFile().mkdirs();
         this.dbFile = dbFile;
