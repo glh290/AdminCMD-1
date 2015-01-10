@@ -41,7 +41,7 @@ public class AdminCMD {
     }
 
     public static void onEnable() {
-        //TODO: Load config
+        Config.load();
         DatabaseFactory.init();
     }
 

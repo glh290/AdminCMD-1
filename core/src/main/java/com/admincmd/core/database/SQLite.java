@@ -22,7 +22,6 @@ import com.admincmd.api.database.Database;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.sqlite.JDBC;
 
 /**
  * <strong>Project:</strong> plugin <br>

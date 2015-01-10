@@ -11,7 +11,7 @@
     
     <build>
         <defaultGoal>clean install</defaultGoal>
-        <finalName>AdminCMD</finalName>
+        <finalName>AdminCMD-Sponge</finalName>
         <plugins>            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

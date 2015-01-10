@@ -1,86 +1,90 @@
-/*
- * This file is part of AdminCMD-Rebirth
- * Copyright (C) 2014 AdminCMD Team
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
 package com.admincmd.core.util.configuration;
 
+/**
+ * Various settings for controlling the input and output of a {@link
+ * Configuration}
+ */
 public class ConfigurationOptions {
+    private char pathSeparator = '.';
+    private boolean copyDefaults = false;
+    private final Configuration configuration;
 
-	private char pathSeparator = '.';
-	private int indent = 2;
-	private boolean copyDefaults = false;
-	private String header = null;
-	private boolean copyHeader = true;
-	private final Configuration config;
+    protected ConfigurationOptions(Configuration configuration) {
+        this.configuration = configuration;
+    }
 
-	protected ConfigurationOptions(Configuration config) {
-		this.config = config;
-	}
+    /**
+     * Returns the {@link Configuration} that this object is responsible for.
+     *
+     * @return Parent configuration
+     */
+    public Configuration configuration() {
+        return configuration;
+    }
 
-	public Configuration configuration() {
-		return this.config;
-	}
+    /**
+     * Gets the char that will be used to separate {@link
+     * ConfigurationSection}s
+     * <p>
+     * This value does not affect how the {@link Configuration} is stored,
+     * only in how you access the data. The default value is '.'.
+     *
+     * @return Path separator
+     */
+    public char pathSeparator() {
+        return pathSeparator;
+    }
 
-	public char pathSeparator() {
-		return this.pathSeparator;
-	}
+    /**
+     * Sets the char that will be used to separate {@link
+     * ConfigurationSection}s
+     * <p>
+     * This value does not affect how the {@link Configuration} is stored,
+     * only in how you access the data. The default value is '.'.
+     *
+     * @param value Path separator
+     * @return This object, for chaining
+     */
+    public ConfigurationOptions pathSeparator(char value) {
+        this.pathSeparator = value;
+        return this;
+    }
 
-	public ConfigurationOptions pathSeparator(char value) {
-		this.pathSeparator = value;
-		return this;
-	}
+    /**
+     * Checks if the {@link Configuration} should copy values from its default
+     * {@link Configuration} directly.
+     * <p>
+     * If this is true, all values in the default Configuration will be
+     * directly copied, making it impossible to distinguish between values
+     * that were set and values that are provided by default. As a result,
+     * {@link ConfigurationSection#contains(java.lang.String)} will always
+     * return the same value as {@link
+     * ConfigurationSection#isSet(java.lang.String)}. The default value is
+     * false.
+     *
+     * @return Whether or not defaults are directly copied
+     */
+    public boolean copyDefaults() {
+        return copyDefaults;
+    }
 
-	public boolean copyDefaults() {
-		return this.copyDefaults;
-	}
-
-	public ConfigurationOptions copyDefaults(boolean value) {
-		this.copyDefaults = value;
-		return this;
-	}
-
-	public boolean copyHeader() {
-		return copyHeader;
-	}
-
-	public ConfigurationOptions copyHeader(final boolean value) {
-		copyHeader = value;
-		return this;
-	}
-
-	public String header() {
-		return header;
-	}
-
-	public ConfigurationOptions header(final String value) {
-		this.header = value;
-		return this;
-	}
-
-	public int indent() {
-		return indent;
-	}
-
-	public ConfigurationOptions indent(final int value) {
-		if (indent < 2 || value > 9) {
-			throw new IllegalArgumentException("Indent must be between 1 and 10 characters");
-		}
-		this.indent = value;
-		return this;
-	}
-
+    /**
+     * Sets if the {@link Configuration} should copy values from its default
+     * {@link Configuration} directly.
+     * <p>
+     * If this is true, all values in the default Configuration will be
+     * directly copied, making it impossible to distinguish between values
+     * that were set and values that are provided by default. As a result,
+     * {@link ConfigurationSection#contains(java.lang.String)} will always
+     * return the same value as {@link
+     * ConfigurationSection#isSet(java.lang.String)}. The default value is
+     * false.
+     *
+     * @param value Whether or not defaults are directly copied
+     * @return This object, for chaining
+     */
+    public ConfigurationOptions copyDefaults(boolean value) {
+        this.copyDefaults = value;
+        return this;
+    }
 }

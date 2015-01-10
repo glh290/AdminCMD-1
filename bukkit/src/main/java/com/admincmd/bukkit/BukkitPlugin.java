@@ -18,6 +18,7 @@
  */
 package com.admincmd.bukkit;
 
+import com.admincmd.core.Config;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.AdminCMD;

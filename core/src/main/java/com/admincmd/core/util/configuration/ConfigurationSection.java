@@ -1,791 +1,642 @@
-/*
- * This file is part of AdminCMD-Rebirth
- * Copyright (C) 2014 AdminCMD Team
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
 package com.admincmd.core.util.configuration;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Pattern;
-
-public class ConfigurationSection {
-
-    protected final Map<String, Object> map = new LinkedHashMap<>();
-    protected final Lock lock = new ReentrantLock(true);
-    private final Configuration root;
-    private final ConfigurationSection parent;
-    private final String path;
-    private final String fullPath;
-
-    public ConfigurationSection() {
-        if (!(this instanceof Configuration)) {
-            throw new IllegalStateException(
-                    "Cannot construct a root MemorySection when not a Configuration");
-        }
-        this.path = "";
-        this.fullPath = "";
-        this.parent = null;
-        this.root = ((Configuration) this);
-    }
-
-    protected ConfigurationSection(ConfigurationSection parent, String path) {
-        if (parent == null) {
-            throw new IllegalArgumentException("Parent cannot be null");
-        } else if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
-        }
-
-        this.path = path;
-        this.parent = parent;
-        this.root = parent.getRoot();
-
-        if (this.root == null) {
-            throw new IllegalArgumentException("Path cannot be orphaned");
-        }
-
-        this.fullPath = createPath(parent, path);
-    }
-
-    public boolean add(final String path, final Object value) {
-        if (isSet(path)) {
-            return false;
-        }
-        set(path, value);
-        return true;
-    }
-
-    public ConfigurationSection addSection(final String path) {
-        ConfigurationSection result = getConfigurationSection(path);
-        if (result == null) {
-            result = createSection(path);
-        }
-        return result;
-    }
-
-    public ConfigurationSection createSection(final String path) {
-        if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
-        } else if (path.length() == 0) {
-            throw new IllegalArgumentException("Cannot create section at empty path");
-        }
-        final String[] split = path.split(Pattern.quote(Character.toString(getRoot().options()
-                .pathSeparator())));
-        ConfigurationSection section = this;
-        for (int i = 0; i < (split.length - 1); i++) {
-            final ConfigurationSection last = section;
-            section = getConfigurationSection(split[i]);
-            if (section == null) {
-                section = last.createSection(split[i]);
-            }
-        }
-        final String key = split[split.length - 1];
-        if (section == this) {
-            final ConfigurationSection result = new ConfigurationSection(this, key);
-            map.put(key, result);
-            return result;
-        } else {
-            return section.createSection(key);
-        }
-    }
-
-    public ConfigurationSection getConfigurationSection(final String path) {
-        if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
-        }
-        final Object val = get(path, getDefault(path));
-        return (val instanceof ConfigurationSection) ? (ConfigurationSection) val : null;
-    }
-
-    public List<Boolean> getBooleanList(final String path, final List<Boolean> def) {
-        final List<Boolean> result = getBooleanList(path);
-        if (result == null || result.isEmpty()) {
-            return def;
-        }
-        return result;
-    }
-
-    public List<Double> getDoubleList(final String path, final List<Double> def) {
-        final List<Double> result = getDoubleList(path);
-        if (result == null || result.isEmpty()) {
-            return def;
-        }
-        return result;
-    }
-
-    public List<Integer> getIntegerList(final String path, final List<Integer> def) {
-        final List<Integer> result = getIntegerList(path);
-        if (result == null || result.isEmpty()) {
-            return def;
-        }
-        return result;
-    }
-
-    public List<String> getStringList(final String path, final List<String> def) {
-        final List<String> result = getStringList(path);
-        if (result == null || result.isEmpty()) {
-            return def;
-        }
-        return result;
-    }
-
-    public void remove(final String path) {
-        set(path, null);
-    }
-
-    // From the AdminCmd ExMemorySection (Inherited from old ConfigurationSection)
-    public Object get(final String path, final Object def) {
-        lock.lock();
-        try {
-            if (path == null) {
-                throw new IllegalArgumentException("Path cannot be null");
-            }
-            if (path.length() == 0) {
-                return this;
-            }
-            Configuration root = getRoot();
-            if (root == null) {
-                throw new IllegalStateException("Cannot access section without a root");
-            }
-            char separator = root.options().pathSeparator();
-
-            int i1 = -1;
-            ConfigurationSection section = this;
-            int i2;
-            while ((i1 = path.indexOf(separator, i2 = i1 + 1)) != -1) {
-                section = section.getConfigurationSection(path.substring(i2, i1));
-                if (section == null) {
-                    return def;
-                }
-            }
-            String key = path.substring(i2);
-            if (section == this) {
-                Object result = this.map.get(key);
-                return result == null ? def : result;
-            }
-            return section.get(key, def);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void set(final String path, final Object value) {
-        lock.lock();
-        try {
-            if ((path == null) || (path.length() == 0)) {
-                throw new IllegalArgumentException("Cannot set to an empty path");
-            }
-
-            Configuration root = getRoot();
-            if (root == null) {
-                throw new IllegalStateException("Cannot use section without a root");
-            }
-            char separator = root.options().pathSeparator();
-
-            int i1 = -1;
-            ConfigurationSection section = this;
-            int i2;
-            while ((i1 = path.indexOf(separator, i2 = i1 + 1)) != -1) {
-                String node = path.substring(i2, i1);
-                ConfigurationSection subSection = section.getConfigurationSection(node);
-                if (subSection == null) {
-                    section = section.createSection(node);
-                } else {
-                    section = subSection;
-                }
-            }
-            String key = path.substring(i2);
-            if (section == this) {
-                if (value == null) {
-                    this.map.remove(key);
-                } else {
-                    this.map.put(key, value);
-                }
-            } else {
-                section.set(key, value);
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public String getString(final String path, final String def) {
-        if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
-        }
-        final Object val = get(path, def);
-        if (val == null) {
-            return def;
-        }
-        return (val instanceof String) ? (String) val : val.toString();
-    }
-
-    public long getLong(final String path, final long def) {
-        if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
-        }
-        final Object val = get(path, def);
-        long returnVal;
-        try {
-            returnVal = castToLong(val);
-        } catch (final NumberFormatException e) {
-            returnVal = def;
-        }
-        return returnVal;
-    }
-
-    // From the AdminCmd ExMemorySection (Not inherited)
-    private long castToLong(final Object value) throws NumberFormatException {
-        if (value instanceof Long) {
-            return (Long) value;
-        } else if (value instanceof String) {
-            return Long.parseLong((String) value);
-        } else if (value instanceof Integer) {
-            return Long.valueOf(((Integer) value));
-        }
-        throw new NumberFormatException();
-    }
-
-    // From the Bukkit MemorySection (Inherited from old ConfigurationSection)
-    public String getCurrentPath() {
-        return this.fullPath;
-    }
-
-    public String getName() {
-        return this.path;
-    }
-
-    public Set<String> getKeys(boolean deep) {
-        Set<String> result = new LinkedHashSet<>();
-
-        Configuration root = getRoot();
-        if ((root != null) && (root.options().copyDefaults())) {
-            ConfigurationSection defaults = getDefaultSection();
-            if (defaults != null) {
-                result.addAll(defaults.getKeys(deep));
-            }
-        }
-        mapChildrenKeys(result, this, deep);
-
-        return result;
-    }
-
-    public Map<String, Object> getValues(boolean deep) {
-        Map<String, Object> result = new LinkedHashMap<>();
-
-        Configuration root = getRoot();
-        if ((root != null) && (root.options().copyDefaults())) {
-            ConfigurationSection defaults = getDefaultSection();
-            if (defaults != null) {
-                result.putAll(defaults.getValues(deep));
-            }
-        }
-        mapChildrenValues(result, this, deep);
-
-        return result;
-    }
-
-    public boolean contains(String path) {
-        return get(path) != null;
-    }
-
-    public boolean isSet(String path) {
-        Configuration root = getRoot();
-        if (root == null) {
-            return false;
-        }
-        if (root.options().copyDefaults()) {
-            return contains(path);
-        }
-        return get(path, null) != null;
-    }
-
-    public void addDefault(String path, Object value) {
-        if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
-        }
-
-        Configuration root = getRoot();
-        if (root == null) {
-            throw new IllegalStateException("Cannot add default without root");
-        }
-        if (root == this) {
-            throw new UnsupportedOperationException(
-                    "Unsupported addDefault(String, Object) implementation");
-        }
-        root.addDefault(createPath(this, path), value);
-    }
-
-    public Configuration getRoot() {
-        return this.root;
-    }
-
-    public ConfigurationSection getParent() {
-        return this.parent;
-    }
-
-    public ConfigurationSection getDefaultSection() {
-        Configuration root = getRoot();
-        Configuration defaults = root == null ? null : root.getDefaults();
-        if ((defaults != null) && (defaults.isConfigurationSection(getCurrentPath()))) {
-            return defaults.getConfigurationSection(getCurrentPath());
-        }
-        return null;
-    }
-
-    public ConfigurationSection createSection(String path, Map<?, ?> map) {
-        ConfigurationSection section = createSection(path);
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
-            if ((entry.getValue() instanceof Map)) {
-                section.createSection(entry.getKey().toString(), (Map<?, ?>) entry.getValue());
-            } else {
-                section.set(entry.getKey().toString(), entry.getValue());
-            }
-        }
-        return section;
-    }
-
-    public boolean isConfigurationSection(String path) {
-        Object val = get(path);
-        return val instanceof ConfigurationSection;
-    }
-
-    public Object get(String path) {
-        return get(path, getDefault(path));
-    }
-
-    public List<?> getList(String path) {
-        Object def = getDefault(path);
-        return getList(path, (def instanceof List) ? (List<?>) def : null);
-    }
-
-    public List<?> getList(String path, List<?> def) {
-        Object val = get(path, def);
-        return (List<?>) ((val instanceof List) ? val : def);
-    }
-
-    public List<Integer> getIntegerList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<>(0);
-        }
-        List<Integer> result = new ArrayList<>();
-        for (Object object : list) {
-            if ((object instanceof Integer)) {
-                result.add((Integer) object);
-            } else if ((object instanceof String)) {
-                try {
-                    result.add(Integer.valueOf((String) object));
-                } catch (Exception ex) {
-                }
-            } else if ((object instanceof Character)) {
-                result.add(Integer.valueOf(((Character) object)));
-            } else if ((object instanceof Number)) {
-                result.add(((Number) object).intValue());
-            }
-        }
-        return result;
-    }
-
-    public List<Float> getFloatList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<>(0);
-        }
-        List<Float> result = new ArrayList<>();
-        for (Object object : list) {
-            if ((object instanceof Float)) {
-                result.add((Float) object);
-            } else if ((object instanceof String)) {
-                try {
-                    result.add(Float.valueOf((String) object));
-                } catch (Exception ex) {
-                }
-            } else if ((object instanceof Character)) {
-                result.add(Float.valueOf(((Character) object)));
-            } else if ((object instanceof Number)) {
-                result.add(((Number) object).floatValue());
-            }
-        }
-        return result;
-    }
-
-    public List<Long> getLongList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<>(0);
-        }
-        List<Long> result = new ArrayList<>();
-        for (Object object : list) {
-            if ((object instanceof Long)) {
-                result.add((Long) object);
-            } else if ((object instanceof String)) {
-                try {
-                    result.add(Long.valueOf((String) object));
-                } catch (Exception ex) {
-                }
-            } else if ((object instanceof Character)) {
-                result.add(Long.valueOf(((Character) object)));
-            } else if ((object instanceof Number)) {
-                result.add(((Number) object).longValue());
-            }
-        }
-        return result;
-    }
-
-    public List<Byte> getByteList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<>(0);
-        }
-        List<Byte> result = new ArrayList<>();
-        for (Object object : list) {
-            if ((object instanceof Byte)) {
-                result.add((Byte) object);
-            } else if ((object instanceof String)) {
-                try {
-                    result.add(Byte.valueOf((String) object));
-                } catch (Exception ex) {
-                }
-            } else if ((object instanceof Character)) {
-                result.add((byte) ((Character) object).charValue());
-            } else if ((object instanceof Number)) {
-                result.add(((Number) object).byteValue());
-            }
-        }
-        return result;
-    }
-
-    public List<Character> getCharacterList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<>(0);
-        }
-        List<Character> result = new ArrayList<>();
-        for (Object object : list) {
-            if ((object instanceof Character)) {
-                result.add((Character) object);
-            } else if ((object instanceof String)) {
-                String str = (String) object;
-                if (str.length() == 1) {
-                    result.add(Character.valueOf(str.charAt(0)));
-                }
-            } else if ((object instanceof Number)) {
-                result.add(Character.valueOf((char) ((Number) object).intValue()));
-            }
-        }
-        return result;
-    }
-
-    public List<Short> getShortList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<Short>(0);
-        }
-        List<Short> result = new ArrayList<Short>();
-        for (Object object : list) {
-            if ((object instanceof Short)) {
-                result.add((Short) object);
-            } else if ((object instanceof String)) {
-                try {
-                    result.add(Short.valueOf((String) object));
-                } catch (Exception ex) {
-                }
-            } else if ((object instanceof Character)) {
-                result.add(Short.valueOf((short) ((Character) object).charValue()));
-            } else if ((object instanceof Number)) {
-                result.add(Short.valueOf(((Number) object).shortValue()));
-            }
-        }
-        return result;
-    }
-
-    public List<Map<?, ?>> getMapList(String path) {
-        List<?> list = getList(path);
-        List<Map<?, ?>> result = new ArrayList<Map<?, ?>>();
-        if (list == null) {
-            return result;
-        }
-        for (Object object : list) {
-            if ((object instanceof Map)) {
-                result.add((Map<?, ?>) object);
-            }
-        }
-        return result;
-    }
-
-    public boolean isList(String path) {
-        Object val = get(path);
-        return val instanceof List;
-    }
-
-    public String getString(String path) {
-        Object def = getDefault(path);
-        return getString(path, def != null ? def.toString() : null);
-    }
-
-    public boolean isString(String path) {
-        Object val = get(path);
-        return val instanceof String;
-    }
-
-    public int getInt(String path) {
-        Object def = getDefault(path);
-        return getInt(path, (def instanceof Number) ? toInt(def) : 0);
-    }
-
-    public int getInt(String path, int def) {
-        Object val = get(path, Integer.valueOf(def));
-        return (val instanceof Number) ? toInt(val) : def;
-    }
-
-    public boolean isInt(String path) {
-        Object val = get(path);
-        return val instanceof Integer;
-    }
-
-    public boolean getBoolean(String path) {
-        Object def = getDefault(path);
-        return getBoolean(path, (def instanceof Boolean) ? ((Boolean) def).booleanValue() : false);
-    }
-
-    public boolean getBoolean(String path, boolean def) {
-        Object val = get(path, Boolean.valueOf(def));
-        return (val instanceof Boolean) ? ((Boolean) val).booleanValue() : def;
-    }
-
-    public boolean isBoolean(String path) {
-        Object val = get(path);
-        return val instanceof Boolean;
-    }
-
-    public double getDouble(String path) {
-        Object def = getDefault(path);
-        return getDouble(path, (def instanceof Number) ? toDouble(def) : 0.0D);
-    }
-
-    public double getDouble(String path, double def) {
-        Object val = get(path, Double.valueOf(def));
-        return (val instanceof Number) ? toDouble(val) : def;
-    }
-
-    public boolean isDouble(String path) {
-        Object val = get(path);
-        return val instanceof Double;
-    }
-
-    public long getLong(String path) {
-        Object def = getDefault(path);
-        return getLong(path, (def instanceof Number) ? toLong(def) : 0L);
-    }
-
-    public boolean isLong(String path) {
-        Object val = get(path);
-        return val instanceof Long;
-    }
-
-    public String toString() {
-        Configuration root = getRoot();
-        return getClass().getSimpleName() + "[path='" + getCurrentPath() + "', root='"
-                + (root == null ? null : root.getClass().getSimpleName()) + "']";
-    }
-
-    // From the Bukkit MemorySection (Not inherited)
-    protected boolean isPrimitiveWrapper(Object input) {
-        return ((input instanceof Integer)) || ((input instanceof Boolean))
-                || ((input instanceof Character)) || ((input instanceof Byte))
-                || ((input instanceof Short)) || ((input instanceof Double))
-                || ((input instanceof Long)) || ((input instanceof Float));
-    }
-
-    protected Object getDefault(String path) {
-        if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
-        }
-
-        Configuration root = getRoot();
-        Configuration defaults = root == null ? null : root.getDefaults();
-        return defaults == null ? null : defaults.get(createPath(this, path));
-    }
-
-    protected void mapChildrenKeys(Set<String> output, ConfigurationSection section, boolean deep) {
-        if ((section instanceof ConfigurationSection)) {
-            ConfigurationSection sec = section;
-            for (Map.Entry<String, Object> entry : sec.map.entrySet()) {
-                output.add(createPath(section, entry.getKey(), this));
-                if ((deep) && ((entry.getValue() instanceof ConfigurationSection))) {
-                    ConfigurationSection subsection = (ConfigurationSection) entry.getValue();
-                    mapChildrenKeys(output, subsection, deep);
-                }
-            }
-        } else {
-            Set<String> keys = section.getKeys(deep);
-            for (String key : keys) {
-                output.add(createPath(section, key, this));
-            }
-        }
-    }
-
-    protected void mapChildrenValues(Map<String, Object> output, ConfigurationSection section,
-            boolean deep) {
-        if ((section instanceof ConfigurationSection)) {
-            ConfigurationSection sec = section;
-            for (Map.Entry<String, Object> entry : sec.map.entrySet()) {
-                output.put(createPath(section, entry.getKey(), this), entry.getValue());
-                if (((entry.getValue() instanceof ConfigurationSection)) && (deep)) {
-                    mapChildrenValues(output, (ConfigurationSection) entry.getValue(), deep);
-                }
-            }
-        } else {
-            Map<String, Object> values = section.getValues(deep);
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                output.put(createPath(section, entry.getKey(), this), entry.getValue());
-            }
-        }
-    }
-
-    public static String createPath(ConfigurationSection section, String key) {
-        return createPath(section, key, section == null ? null : section.getRoot());
-    }
-
-    public static String createPath(ConfigurationSection section, String key,
-            ConfigurationSection relativeTo) {
-        if (section == null) {
-            throw new IllegalArgumentException("Cannot create path without a section");
-        }
-        Configuration root = section.getRoot();
-        if (root == null) {
-            throw new IllegalStateException("Cannot create path without a root");
-        }
-        char separator = root.options().pathSeparator();
-
-        StringBuilder builder = new StringBuilder();
-        for (ConfigurationSection parent = section; (parent != null) && (parent != relativeTo); parent = parent
-                .getParent()) {
-            if (builder.length() > 0) {
-                builder.insert(0, separator);
-            }
-            builder.insert(0, parent.getName());
-        }
-        if ((key != null) && (key.length() > 0)) {
-            if (builder.length() > 0) {
-                builder.append(separator);
-            }
-            builder.append(key);
-        }
-        return builder.toString();
-    }
-
-    public List<String> getStringList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<String>(0);
-        }
-        List<String> result = new ArrayList<String>();
-        for (Object object : list) {
-            if (((object instanceof String)) || (isPrimitiveWrapper(object))) {
-                result.add(String.valueOf(object));
-            }
-        }
-        return result;
-    }
-
-    public List<Boolean> getBooleanList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<Boolean>(0);
-        }
-        List<Boolean> result = new ArrayList<Boolean>();
-        for (Object object : list) {
-            if ((object instanceof Boolean)) {
-                result.add((Boolean) object);
-            } else if ((object instanceof String)) {
-                if (Boolean.TRUE.toString().equals(object)) {
-                    result.add(Boolean.valueOf(true));
-                } else if (Boolean.FALSE.toString().equals(object)) {
-                    result.add(Boolean.valueOf(false));
-                }
-            }
-        }
-        return result;
-    }
-
-    public List<Double> getDoubleList(String path) {
-        List<?> list = getList(path);
-        if (list == null) {
-            return new ArrayList<Double>(0);
-        }
-        List<Double> result = new ArrayList<Double>();
-        for (Object object : list) {
-            if ((object instanceof Double)) {
-                result.add((Double) object);
-            } else if ((object instanceof String)) {
-                try {
-                    result.add(Double.valueOf((String) object));
-                } catch (Exception ex) {
-                }
-            } else if ((object instanceof Character)) {
-                result.add(Double.valueOf(((Character) object).charValue()));
-            } else if ((object instanceof Number)) {
-                result.add(Double.valueOf(((Number) object).doubleValue()));
-            }
-        }
-        return result;
-    }
-
-    public int toInt(Object object) {
-        if ((object instanceof Number)) {
-            return ((Number) object).intValue();
-        }
-        try {
-            return Integer.valueOf(object.toString()).intValue();
-        } catch (NumberFormatException e) {
-        } catch (NullPointerException e) {
-        }
-        return 0;
-    }
-
-    public double toDouble(Object object) {
-        if ((object instanceof Number)) {
-            return ((Number) object).doubleValue();
-        }
-        try {
-            return Double.valueOf(object.toString()).doubleValue();
-        } catch (NumberFormatException e) {
-        } catch (NullPointerException e) {
-        }
-        return 0.0D;
-    }
-
-    public long toLong(Object object) {
-        if ((object instanceof Number)) {
-            return ((Number) object).longValue();
-        }
-        try {
-            return Long.valueOf(object.toString()).longValue();
-        } catch (NumberFormatException e) {
-        } catch (NullPointerException e) {
-        }
-        return 0L;
-    }
-
+import java.util.List;
+
+/**
+ * Represents a section of a {@link Configuration}
+ */
+public interface ConfigurationSection {
+    /**
+     * Gets a set containing all keys in this section.
+     * <p>
+     * If deep is set to true, then this will contain all the keys within any
+     * child {@link ConfigurationSection}s (and their children, etc). These
+     * will be in a valid path notation for you to use.
+     * <p>
+     * If deep is set to false, then this will contain only the keys of any
+     * direct children, and not their own children.
+     *
+     * @param deep Whether or not to get a deep list, as opposed to a shallow
+     *     list.
+     * @return Set of keys contained within this ConfigurationSection.
+     */
+    public Set<String> getKeys(boolean deep);
+
+    /**
+     * Gets a Map containing all keys and their values for this section.
+     * <p>
+     * If deep is set to true, then this will contain all the keys and values
+     * within any child {@link ConfigurationSection}s (and their children,
+     * etc). These keys will be in a valid path notation for you to use.
+     * <p>
+     * If deep is set to false, then this will contain only the keys and
+     * values of any direct children, and not their own children.
+     *
+     * @param deep Whether or not to get a deep list, as opposed to a shallow
+     *     list.
+     * @return Map of keys and values of this section.
+     */
+    public Map<String, Object> getValues(boolean deep);
+
+    /**
+     * Checks if this {@link ConfigurationSection} contains the given path.
+     * <p>
+     * If the value for the requested path does not exist but a default value
+     * has been specified, this will return true.
+     *
+     * @param path Path to check for existence.
+     * @return True if this section contains the requested path, either via
+     *     default or being set.
+     * @throws IllegalArgumentException Thrown when path is null.
+     */
+    public boolean contains(String path);
+
+    /**
+     * Checks if this {@link ConfigurationSection} has a value set for the
+     * given path.
+     * <p>
+     * If the value for the requested path does not exist but a default value
+     * has been specified, this will still return false.
+     *
+     * @param path Path to check for existence.
+     * @return True if this section contains the requested path, regardless of
+     *     having a default.
+     * @throws IllegalArgumentException Thrown when path is null.
+     */
+    public boolean isSet(String path);
+
+    /**
+     * Gets the path of this {@link ConfigurationSection} from its root {@link
+     * Configuration}
+     * <p>
+     * For any {@link Configuration} themselves, this will return an empty
+     * string.
+     * <p>
+     * If the section is no longer contained within its root for any reason,
+     * such as being replaced with a different value, this may return null.
+     * <p>
+     * To retrieve the single name of this section, that is, the final part of
+     * the path returned by this method, you may use {@link #getName()}.
+     *
+     * @return Path of this section relative to its root
+     */
+    public String getCurrentPath();
+
+    /**
+     * Gets the name of this individual {@link ConfigurationSection}, in the
+     * path.
+     * <p>
+     * This will always be the final part of {@link #getCurrentPath()}, unless
+     * the section is orphaned.
+     *
+     * @return Name of this section
+     */
+    public String getName();
+
+    /**
+     * Gets the root {@link Configuration} that contains this {@link
+     * ConfigurationSection}
+     * <p>
+     * For any {@link Configuration} themselves, this will return its own
+     * object.
+     * <p>
+     * If the section is no longer contained within its root for any reason,
+     * such as being replaced with a different value, this may return null.
+     *
+     * @return Root configuration containing this section.
+     */
+    public Configuration getRoot();
+
+    /**
+     * Gets the parent {@link ConfigurationSection} that directly contains
+     * this {@link ConfigurationSection}.
+     * <p>
+     * For any {@link Configuration} themselves, this will return null.
+     * <p>
+     * If the section is no longer contained within its parent for any reason,
+     * such as being replaced with a different value, this may return null.
+     *
+     * @return Parent section containing this section.
+     */
+    public ConfigurationSection getParent();
+
+    /**
+     * Gets the requested Object by path.
+     * <p>
+     * If the Object does not exist but a default value has been specified,
+     * this will return the default value. If the Object does not exist and no
+     * default value was specified, this will return null.
+     *
+     * @param path Path of the Object to get.
+     * @return Requested Object.
+     */
+    public Object get(String path);
+
+    /**
+     * Gets the requested Object by path, returning a default value if not
+     * found.
+     * <p>
+     * If the Object does not exist then the specified default value will
+     * returned regardless of if a default has been identified in the root
+     * {@link Configuration}.
+     *
+     * @param path Path of the Object to get.
+     * @param def The default value to return if the path is not found.
+     * @return Requested Object.
+     */
+    public Object get(String path, Object def);
+
+    /**
+     * Sets the specified path to the given value.
+     * <p>
+     * If value is null, the entry will be removed. Any existing entry will be
+     * replaced, regardless of what the new value is.
+     * <p>
+     * Some implementations may have limitations on what you may store. See
+     * their individual javadocs for details. No implementations should allow
+     * you to store {@link Configuration}s or {@link ConfigurationSection}s,
+     * please use {@link #createSection(java.lang.String)} for that.
+     *
+     * @param path Path of the object to set.
+     * @param value New value to set the path to.
+     */
+    public void set(String path, Object value);
+
+    /**
+     * Creates an empty {@link ConfigurationSection} at the specified path.
+     * <p>
+     * Any value that was previously set at this path will be overwritten. If
+     * the previous value was itself a {@link ConfigurationSection}, it will
+     * be orphaned.
+     *
+     * @param path Path to create the section at.
+     * @return Newly created section
+     */
+    public ConfigurationSection createSection(String path);
+
+    /**
+     * Creates a {@link ConfigurationSection} at the specified path, with
+     * specified values.
+     * <p>
+     * Any value that was previously set at this path will be overwritten. If
+     * the previous value was itself a {@link ConfigurationSection}, it will
+     * be orphaned.
+     *
+     * @param path Path to create the section at.
+     * @param map The values to used.
+     * @return Newly created section
+     */
+    public ConfigurationSection createSection(String path, Map<?, ?> map);
+
+    // Primitives
+    /**
+     * Gets the requested String by path.
+     * <p>
+     * If the String does not exist but a default value has been specified,
+     * this will return the default value. If the String does not exist and no
+     * default value was specified, this will return null.
+     *
+     * @param path Path of the String to get.
+     * @return Requested String.
+     */
+    public String getString(String path);
+
+    /**
+     * Gets the requested String by path, returning a default value if not
+     * found.
+     * <p>
+     * If the String does not exist then the specified default value will
+     * returned regardless of if a default has been identified in the root
+     * {@link Configuration}.
+     *
+     * @param path Path of the String to get.
+     * @param def The default value to return if the path is not found or is
+     *     not a String.
+     * @return Requested String.
+     */
+    public String getString(String path, String def);
+
+    /**
+     * Checks if the specified path is a String.
+     * <p>
+     * If the path exists but is not a String, this will return false. If the
+     * path does not exist, this will return false. If the path does not exist
+     * but a default value has been specified, this will check if that default
+     * value is a String and return appropriately.
+     *
+     * @param path Path of the String to check.
+     * @return Whether or not the specified path is a String.
+     */
+    public boolean isString(String path);
+
+    /**
+     * Gets the requested int by path.
+     * <p>
+     * If the int does not exist but a default value has been specified, this
+     * will return the default value. If the int does not exist and no default
+     * value was specified, this will return 0.
+     *
+     * @param path Path of the int to get.
+     * @return Requested int.
+     */
+    public int getInt(String path);
+
+    /**
+     * Gets the requested int by path, returning a default value if not found.
+     * <p>
+     * If the int does not exist then the specified default value will
+     * returned regardless of if a default has been identified in the root
+     * {@link Configuration}.
+     *
+     * @param path Path of the int to get.
+     * @param def The default value to return if the path is not found or is
+     *     not an int.
+     * @return Requested int.
+     */
+    public int getInt(String path, int def);
+
+    /**
+     * Checks if the specified path is an int.
+     * <p>
+     * If the path exists but is not a int, this will return false. If the
+     * path does not exist, this will return false. If the path does not exist
+     * but a default value has been specified, this will check if that default
+     * value is a int and return appropriately.
+     *
+     * @param path Path of the int to check.
+     * @return Whether or not the specified path is an int.
+     */
+    public boolean isInt(String path);
+
+    /**
+     * Gets the requested boolean by path.
+     * <p>
+     * If the boolean does not exist but a default value has been specified,
+     * this will return the default value. If the boolean does not exist and
+     * no default value was specified, this will return false.
+     *
+     * @param path Path of the boolean to get.
+     * @return Requested boolean.
+     */
+    public boolean getBoolean(String path);
+
+    /**
+     * Gets the requested boolean by path, returning a default value if not
+     * found.
+     * <p>
+     * If the boolean does not exist then the specified default value will
+     * returned regardless of if a default has been identified in the root
+     * {@link Configuration}.
+     *
+     * @param path Path of the boolean to get.
+     * @param def The default value to return if the path is not found or is
+     *     not a boolean.
+     * @return Requested boolean.
+     */
+    public boolean getBoolean(String path, boolean def);
+
+    /**
+     * Checks if the specified path is a boolean.
+     * <p>
+     * If the path exists but is not a boolean, this will return false. If the
+     * path does not exist, this will return false. If the path does not exist
+     * but a default value has been specified, this will check if that default
+     * value is a boolean and return appropriately.
+     *
+     * @param path Path of the boolean to check.
+     * @return Whether or not the specified path is a boolean.
+     */
+    public boolean isBoolean(String path);
+
+    /**
+     * Gets the requested double by path.
+     * <p>
+     * If the double does not exist but a default value has been specified,
+     * this will return the default value. If the double does not exist and no
+     * default value was specified, this will return 0.
+     *
+     * @param path Path of the double to get.
+     * @return Requested double.
+     */
+    public double getDouble(String path);
+
+    /**
+     * Gets the requested double by path, returning a default value if not
+     * found.
+     * <p>
+     * If the double does not exist then the specified default value will
+     * returned regardless of if a default has been identified in the root
+     * {@link Configuration}.
+     *
+     * @param path Path of the double to get.
+     * @param def The default value to return if the path is not found or is
+     *     not a double.
+     * @return Requested double.
+     */
+    public double getDouble(String path, double def);
+
+    /**
+     * Checks if the specified path is a double.
+     * <p>
+     * If the path exists but is not a double, this will return false. If the
+     * path does not exist, this will return false. If the path does not exist
+     * but a default value has been specified, this will check if that default
+     * value is a double and return appropriately.
+     *
+     * @param path Path of the double to check.
+     * @return Whether or not the specified path is a double.
+     */
+    public boolean isDouble(String path);
+
+    /**
+     * Gets the requested long by path.
+     * <p>
+     * If the long does not exist but a default value has been specified, this
+     * will return the default value. If the long does not exist and no
+     * default value was specified, this will return 0.
+     *
+     * @param path Path of the long to get.
+     * @return Requested long.
+     */
+    public long getLong(String path);
+
+    /**
+     * Gets the requested long by path, returning a default value if not
+     * found.
+     * <p>
+     * If the long does not exist then the specified default value will
+     * returned regardless of if a default has been identified in the root
+     * {@link Configuration}.
+     *
+     * @param path Path of the long to get.
+     * @param def The default value to return if the path is not found or is
+     *     not a long.
+     * @return Requested long.
+     */
+    public long getLong(String path, long def);
+
+    /**
+     * Checks if the specified path is a long.
+     * <p>
+     * If the path exists but is not a long, this will return false. If the
+     * path does not exist, this will return false. If the path does not exist
+     * but a default value has been specified, this will check if that default
+     * value is a long and return appropriately.
+     *
+     * @param path Path of the long to check.
+     * @return Whether or not the specified path is a long.
+     */
+    public boolean isLong(String path);
+
+    // Java
+    /**
+     * Gets the requested List by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return null.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List.
+     */
+    public List<?> getList(String path);
+
+    /**
+     * Gets the requested List by path, returning a default value if not
+     * found.
+     * <p>
+     * If the List does not exist then the specified default value will
+     * returned regardless of if a default has been identified in the root
+     * {@link Configuration}.
+     *
+     * @param path Path of the List to get.
+     * @param def The default value to return if the path is not found or is
+     *     not a List.
+     * @return Requested List.
+     */
+    public List<?> getList(String path, List<?> def);
+
+    /**
+     * Checks if the specified path is a List.
+     * <p>
+     * If the path exists but is not a List, this will return false. If the
+     * path does not exist, this will return false. If the path does not exist
+     * but a default value has been specified, this will check if that default
+     * value is a List and return appropriately.
+     *
+     * @param path Path of the List to check.
+     * @return Whether or not the specified path is a List.
+     */
+    public boolean isList(String path);
+
+    /**
+     * Gets the requested List of String by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a String if possible,
+     * but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of String.
+     */
+    public List<String> getStringList(String path);
+
+    /**
+     * Gets the requested List of Integer by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Integer if possible,
+     * but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Integer.
+     */
+    public List<Integer> getIntegerList(String path);
+
+    /**
+     * Gets the requested List of Boolean by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Boolean if possible,
+     * but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Boolean.
+     */
+    public List<Boolean> getBooleanList(String path);
+
+    /**
+     * Gets the requested List of Double by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Double if possible,
+     * but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Double.
+     */
+    public List<Double> getDoubleList(String path);
+
+    /**
+     * Gets the requested List of Float by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Float if possible,
+     * but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Float.
+     */
+    public List<Float> getFloatList(String path);
+
+    /**
+     * Gets the requested List of Long by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Long if possible,
+     * but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Long.
+     */
+    public List<Long> getLongList(String path);
+
+    /**
+     * Gets the requested List of Byte by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Byte if possible,
+     * but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Byte.
+     */
+    public List<Byte> getByteList(String path);
+
+    /**
+     * Gets the requested List of Character by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Character if
+     * possible, but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Character.
+     */
+    public List<Character> getCharacterList(String path);
+
+    /**
+     * Gets the requested List of Short by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Short if possible,
+     * but may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Short.
+     */
+    public List<Short> getShortList(String path);
+
+    /**
+     * Gets the requested List of Maps by path.
+     * <p>
+     * If the List does not exist but a default value has been specified, this
+     * will return the default value. If the List does not exist and no
+     * default value was specified, this will return an empty List.
+     * <p>
+     * This method will attempt to cast any values into a Map if possible, but
+     * may miss any values out if they are not compatible.
+     *
+     * @param path Path of the List to get.
+     * @return Requested List of Maps.
+     */
+    public List<Map<?, ?>> getMapList(String path);
+    
+    /**
+     * Gets the requested ConfigurationSection by path.
+     * <p>
+     * If the ConfigurationSection does not exist but a default value has been
+     * specified, this will return the default value. If the
+     * ConfigurationSection does not exist and no default value was specified,
+     * this will return null.
+     *
+     * @param path Path of the ConfigurationSection to get.
+     * @return Requested ConfigurationSection.
+     */
+    public ConfigurationSection getConfigurationSection(String path);
+
+    /**
+     * Checks if the specified path is a ConfigurationSection.
+     * <p>
+     * If the path exists but is not a ConfigurationSection, this will return
+     * false. If the path does not exist, this will return false. If the path
+     * does not exist but a default value has been specified, this will check
+     * if that default value is a ConfigurationSection and return
+     * appropriately.
+     *
+     * @param path Path of the ConfigurationSection to check.
+     * @return Whether or not the specified path is a ConfigurationSection.
+     */
+    public boolean isConfigurationSection(String path);
+
+    /**
+     * Gets the equivalent {@link ConfigurationSection} from the default
+     * {@link Configuration} defined in {@link #getRoot()}.
+     * <p>
+     * If the root contains no defaults, or the defaults doesn't contain a
+     * value for this path, or the value at this path is not a {@link
+     * ConfigurationSection} then this will return null.
+     *
+     * @return Equivalent section in root configuration
+     */
+    public ConfigurationSection getDefaultSection();
+
+    /**
+     * Sets the default value in the root at the given path as provided.
+     * <p>
+     * If no source {@link Configuration} was provided as a default
+     * collection, then a new {@link MemoryConfiguration} will be created to
+     * hold the new default value.
+     * <p>
+     * If value is null, the value will be removed from the default
+     * Configuration source.
+     * <p>
+     * If the value as returned by {@link #getDefaultSection()} is null, then
+     * this will create a new section at the path, replacing anything that may
+     * have existed there previously.
+     *
+     * @param path Path of the value to set.
+     * @param value Value to set the default to.
+     * @throws IllegalArgumentException Thrown if path is null.
+     */
+    public void addDefault(String path, Object value);
 }

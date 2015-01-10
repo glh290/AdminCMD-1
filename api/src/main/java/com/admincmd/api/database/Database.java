@@ -41,6 +41,14 @@ public abstract class Database {
         }
     }
 
+    public final void testConnection() {
+        try {
+            getConnection();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     /**
      * Gets the connection
      *

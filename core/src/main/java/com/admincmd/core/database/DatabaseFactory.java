@@ -20,6 +20,7 @@ package com.admincmd.core.database;
 
 import com.admincmd.api.database.Database;
 import com.admincmd.core.AdminCMD;
+import com.admincmd.core.Config;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -38,7 +39,14 @@ public class DatabaseFactory {
             ex.printStackTrace();
         }
 
-        //TODO: Config implementation
+        if (Config.MYSQL_USE.getBoolean()) {
+            db = new MySQL(Config.MYSQL_IP.getString(), Config.MYSQL_USER.getString(), Config.MYSQL_PASSWORD.getString(), Config.MYSQL_DATABASE.getString(), Config.MYSQL_PORT.getInteger());
+        } else {
+            db = new SQLite(new File(AdminCMD.getACPlugin().getDataFolder(), "Database.db"));
+        }
+        
+        db.testConnection();
+        
     }
 
     public static Database getDatabase() {
