@@ -51,7 +51,6 @@
     <modules>
         <module>core</module>
         <module>api</module>
-        <module>plugin</module>
         <module>bukkit</module>
         <module>sponge</module>
         <module>compile-bukkit</module>
