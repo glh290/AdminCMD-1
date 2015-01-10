@@ -19,15 +19,18 @@
 package com.admincmd.plugin.util.database;
 
 import com.admincmd.api.database.Database;
+import com.admincmd.core.AdminCMD;
+import com.admincmd.core.Config;
+import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import org.gjt.mm.mysql.Driver;
 import org.sqlite.JDBC;
 
 public class DatabaseFactory {
-    
-    private Database db;
-    
+
+    private static Database db = null;
+
     public static void init() {
         try {
             DriverManager.registerDriver(new JDBC());
@@ -35,10 +38,15 @@ public class DatabaseFactory {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        
+
         //TODO: Config implementation
-        boolean mysql = true;
-        
+        boolean mysql = Config.SQL_USEMYSQL.getBoolean();
+
+        db = mysql ? new MySQL(Config.SQL_MYSQL_IP.getString(), Config.SQL_MYSQL_USER.getString(), Config.SQL_MYSQL_PASSWORD.getString(), Config.SQL_MYSQL_DB.getString(), Config.SQL_MYSQL_PORT.getInteger()) : new SQLite(new File(AdminCMD.getACPlugin().getDataFolder(), "Database.db"));
     }
-    
+
+    public static Database getDatabase() {
+        return db;
+    }
+
 }

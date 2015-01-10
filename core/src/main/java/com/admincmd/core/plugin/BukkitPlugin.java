@@ -21,6 +21,9 @@ package com.admincmd.core.plugin;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.AdminCMD;
+import com.admincmd.core.Config;
+import com.admincmd.plugin.util.database.DatabaseFactory;
+import java.sql.SQLException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -44,11 +47,17 @@ public class BukkitPlugin extends JavaPlugin implements ACPlugin {
     @Override
     public void onPluginEnable() {
         AdminCMD.registerACPlugin(this);
+        Config.load();
+        DatabaseFactory.init();
     }
 
     @Override
     public void onPluginDisable() {
-        //disabling code here
+        try {
+            DatabaseFactory.getDatabase().closeConnection();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override

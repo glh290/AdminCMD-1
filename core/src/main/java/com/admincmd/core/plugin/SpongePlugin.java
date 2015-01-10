@@ -21,7 +21,10 @@ package com.admincmd.core.plugin;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.AdminCMD;
+import com.admincmd.core.Config;
+import com.admincmd.plugin.util.database.DatabaseFactory;
 import java.io.File;
+import java.sql.SQLException;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartingEvent;
@@ -59,12 +62,18 @@ public class SpongePlugin implements ACPlugin {
     @Override
     public void onPluginEnable() {
         AdminCMD.registerACPlugin(this);
+        Config.load();
+        DatabaseFactory.init();
         //enabling code here
     }
 
     @Override
     public void onPluginDisable() {
-        //disabling code here
+        try {
+            DatabaseFactory.getDatabase().closeConnection();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
