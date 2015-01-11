@@ -86,7 +86,7 @@ public class Location {
 
     @Override
     public String toString() {
-        return getClass().getPackage().getName() + "." + getClass().getName() + "{" + "x=" + x + ";y=" + y + ";z=" + z + "world=" + world.getName() + "}";
+        return getClass().getPackage().getName() + "." + getClass().getName() + "{" + "x=" + x + ";y=" + y + ";z=" + z + ";world=" + world.getName() + "}";
     }
 
 }

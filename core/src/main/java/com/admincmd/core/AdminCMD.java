@@ -20,6 +20,7 @@ package com.admincmd.core;
 
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
+import com.admincmd.api.world.World;
 import com.admincmd.core.database.DatabaseFactory;
 import com.admincmd.core.util.loggers.ACLogger;
 import com.admincmd.core.world.ACWorld;
@@ -44,14 +45,26 @@ public class AdminCMD {
     }
 
     public static void onEnable() {
+        long start = System.currentTimeMillis();
         Config.load();
         DatabaseFactory.init();
 
-        ACWorld world = new ACWorld();
-        String s = world.getName();
-        ACLogger.info(world.toString());
+        //debug start
+        try {
+            World w = new ACWorld();
+            String name = w.getName();
+            if (name.equalsIgnoreCase("test")) {
+
+            }
+        } catch (Exception e) {
+            ACLogger.debug("Could not get the world name", e);
+        }
+        //debug stop
 
         //acp.getCommandRegistry().registerClass(null);
+        long timeTook = System.currentTimeMillis() - start;
+        ACLogger.debug("Plugin start took " + timeTook + " miliseconds");
+
     }
 
     public static void onDisable() {
@@ -60,6 +73,8 @@ public class AdminCMD {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+
+        System.gc();
     }
 
     public static ServerSoftware getServerSoftware() {
