@@ -16,15 +16,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.block;
+package com.admincmd.bukkit.block;
 
+import com.admincmd.api.block.Block;
 import com.admincmd.api.world.Location;
 import com.admincmd.api.world.World;
 
-public interface Block {
+/**
+ * <strong>Project:</strong> bukkit <br>
+ * <strong>File:</strong> IBlock.java
+ *
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class IBlock implements Block {
 
-    World getWorld();
+    @Override
+    public Location getLocation() {
+        return null;
+    }
 
-    Location getLocation();
+    @Override
+    public World getWorld() {
+        return null;
+    }
 
 }

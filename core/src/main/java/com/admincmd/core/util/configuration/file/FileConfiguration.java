@@ -26,7 +26,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
     }
 
     public void save(File file) throws IOException {
-        file.mkdirs();
+        file.getParentFile().mkdirs();
 
         String data = saveToString();
 

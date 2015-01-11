@@ -21,6 +21,7 @@ package com.admincmd.core.database;
 import com.admincmd.api.database.Database;
 import com.admincmd.core.AdminCMD;
 import com.admincmd.core.Config;
+import com.admincmd.core.util.loggers.ACLogger;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,9 +29,9 @@ import org.gjt.mm.mysql.Driver;
 import org.sqlite.JDBC;
 
 public class DatabaseFactory {
-
+    
     private static Database db = null;
-
+    
     public static void init() {
         try {
             DriverManager.registerDriver(new JDBC());
@@ -38,19 +39,23 @@ public class DatabaseFactory {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
+        
         if (Config.MYSQL_USE.getBoolean()) {
             db = new MySQL(Config.MYSQL_IP.getString(), Config.MYSQL_USER.getString(), Config.MYSQL_PASSWORD.getString(), Config.MYSQL_DATABASE.getString(), Config.MYSQL_PORT.getInteger());
         } else {
             db = new SQLite(new File(AdminCMD.getACPlugin().getDataFolder(), "Database.db"));
         }
         
-        db.testConnection();
+        if (db.testConnection()) {
+            ACLogger.info("The connection was successful!");
+        } else {
+            ACLogger.severe("Could not connect to the Database!");
+        }
         
     }
-
+    
     public static Database getDatabase() {
         return db;
     }
-
+    
 }

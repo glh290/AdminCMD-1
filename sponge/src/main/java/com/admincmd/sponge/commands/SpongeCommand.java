@@ -16,15 +16,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.block;
+package com.admincmd.sponge.commands;
 
-import com.admincmd.api.world.Location;
-import com.admincmd.api.world.World;
+import com.admincmd.api.commands.Command;
+import java.lang.annotation.Annotation;
 
-public interface Block {
+/**
+ * <strong>Project:</strong> sponge <br>
+ * <strong>File:</strong> SpongeCommand.java
+ * 
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class SpongeCommand implements Command {
 
-    World getWorld();
+    @Override
+    public String name() {
+        return null;
+    }
 
-    Location getLocation();
+    @Override
+    public Class<? extends Annotation> annotationType() {
+        return null;
+    }
 
 }

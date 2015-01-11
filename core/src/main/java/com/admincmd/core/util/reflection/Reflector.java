@@ -16,42 +16,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.core.block;
+package com.admincmd.core.util.reflection;
 
-import com.admincmd.api.block.Block;
-import com.admincmd.api.world.Location;
-import com.admincmd.api.world.World;
-import com.admincmd.core.util.reflection.Reflector;
+import com.admincmd.api.plugin.ServerSoftware;
+import com.admincmd.core.AdminCMD;
 
 /**
  * <strong>Project:</strong> core <br>
- * <strong>File:</strong> ACBlock.java
+ * <strong>File:</strong> Reflector.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class ACBlock implements Block {
+public class Reflector {
 
-    private Block b;
+    public static String getPackageName() {
+        String ret = "com.admincmd.";
 
-    public ACBlock() {
-        try {
-            Class<?> clazz= Reflector.getSoftwareClass(".block.IBlock");
-                       
-            Object o = clazz.newInstance();
-            b = (Block) o;
-        } catch (InstantiationException | IllegalAccessException ex) {
-            ex.printStackTrace();
+        if (AdminCMD.getServerSoftware() == ServerSoftware.BUKKIT) {
+            ret += "bukkit";
+        } else {
+            ret += "sponge";
         }
+
+        return ret;
     }
 
-    @Override
-    public World getWorld() {
-        return b.getWorld();
-    }
-
-    @Override
-    public Location getLocation() {
-        return b.getLocation();
+    public static Class<?> getSoftwareClass(String name) {
+        try {
+            return Class.forName(getPackageName() + name);
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
 }

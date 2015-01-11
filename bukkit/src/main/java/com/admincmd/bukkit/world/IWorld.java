@@ -16,15 +16,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.block;
+package com.admincmd.bukkit.world;
 
 import com.admincmd.api.world.Location;
 import com.admincmd.api.world.World;
 
-public interface Block {
+/**
+ * <strong>Project:</strong> bukkit <br>
+ * <strong>File:</strong> IWorld.java
+ *
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class IWorld implements World {
 
-    World getWorld();
+    @Override
+    public Location getSpawnLocation() {
+        return null;
+    }
 
-    Location getLocation();
+    @Override
+    public void setSpawnLocation() {
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
 
 }

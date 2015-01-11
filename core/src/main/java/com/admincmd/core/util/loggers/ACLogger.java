@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class ACLogger {
 
     private static final Logger logger = Logger.getLogger("AdminCMD");
-    private static final String PREFIX = "[AdminCMD]";
+    private static final String PREFIX = "[AdminCMD] ";
 
     /**
      * Logs information to console

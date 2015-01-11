@@ -19,6 +19,7 @@
 package com.admincmd.core.entity;
 
 import com.admincmd.api.entity.Player;
+import com.admincmd.core.util.reflection.Reflector;
 
 /**
  * <strong>Project:</strong> core <br>
@@ -27,5 +28,17 @@ import com.admincmd.api.entity.Player;
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
 public class ACPlayer implements Player {
+    
+    private Player p;
+    
+    public ACPlayer() {
+        try {
+            Class<?> clazz = Reflector.getSoftwareClass(".entity.IPlayer");          
+            Object o = clazz.newInstance();
+            p = (Player) o;
+        } catch (InstantiationException | IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
+    }
 
 }

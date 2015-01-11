@@ -41,11 +41,12 @@ public abstract class Database {
         }
     }
 
-    public final void testConnection() {
+    public final boolean testConnection() {
         try {
             getConnection();
+            return true;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            return false;
         }
     }
 

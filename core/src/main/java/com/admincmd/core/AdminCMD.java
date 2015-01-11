@@ -19,7 +19,10 @@
 package com.admincmd.core;
 
 import com.admincmd.api.plugin.ACPlugin;
+import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.database.DatabaseFactory;
+import com.admincmd.core.util.loggers.ACLogger;
+import com.admincmd.core.world.ACWorld;
 import java.sql.SQLException;
 
 /**
@@ -43,6 +46,10 @@ public class AdminCMD {
     public static void onEnable() {
         Config.load();
         DatabaseFactory.init();
+
+        ACWorld world = new ACWorld();
+        String s = world.getName();
+        ACLogger.info(world.toString());
     }
 
     public static void onDisable() {
@@ -51,6 +58,10 @@ public class AdminCMD {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static ServerSoftware getServerSoftware() {
+        return acp.getServerSoftware();
     }
 
 }

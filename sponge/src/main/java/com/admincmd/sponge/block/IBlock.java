@@ -16,8 +16,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api;
+package com.admincmd.sponge.block;
 
-public interface Server {
+import com.admincmd.api.world.Location;
+import com.admincmd.api.world.World;
+
+/**
+ * <strong>Project:</strong> sponge <br>
+ * <strong>File:</strong> IBlock.java
+ * 
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class IBlock implements com.admincmd.api.block.Block {
+
+    @Override
+    public World getWorld() {
+        return null;
+    }
+
+    @Override
+    public Location getLocation() {
+        return null;
+    }
 
 }

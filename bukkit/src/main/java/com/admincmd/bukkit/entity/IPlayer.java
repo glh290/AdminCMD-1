@@ -16,16 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.core;
+package com.admincmd.bukkit.entity;
 
-import com.admincmd.api.Server;
+import com.admincmd.api.entity.Player;
 
 /**
- * <strong>Project:</strong> core <br>
- * <strong>File:</strong> ACServer.java
+ * <strong>Project:</strong> bukkit <br>
+ * <strong>File:</strong> IPlayer.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class ACServer implements Server {
+public class IPlayer implements Player {
 
 }

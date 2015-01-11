@@ -16,15 +16,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.block;
+package com.admincmd.sponge.entity;
 
-import com.admincmd.api.world.Location;
-import com.admincmd.api.world.World;
 
-public interface Block {
-
-    World getWorld();
-
-    Location getLocation();
+/**
+ * <strong>Project:</strong> sponge <br>
+ * <strong>File:</strong> IPlayer.java
+ *
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class IPlayer implements com.admincmd.api.entity.Player {
 
 }

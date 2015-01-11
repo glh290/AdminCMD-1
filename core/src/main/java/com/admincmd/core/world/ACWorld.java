@@ -16,42 +16,51 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.core.block;
+package com.admincmd.core.world;
 
-import com.admincmd.api.block.Block;
 import com.admincmd.api.world.Location;
 import com.admincmd.api.world.World;
 import com.admincmd.core.util.reflection.Reflector;
 
 /**
  * <strong>Project:</strong> core <br>
- * <strong>File:</strong> ACBlock.java
+ * <strong>File:</strong> ACWorld.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class ACBlock implements Block {
+public class ACWorld implements World {
 
-    private Block b;
+    public World w;
 
-    public ACBlock() {
+    public ACWorld() {
         try {
-            Class<?> clazz= Reflector.getSoftwareClass(".block.IBlock");
-                       
+            Class<?> clazz = Reflector.getSoftwareClass(".world.IWorld");
+
             Object o = clazz.newInstance();
-            b = (Block) o;
+            w = (World) o;
         } catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace();
         }
     }
 
     @Override
-    public World getWorld() {
-        return b.getWorld();
+    public String toString() {
+        return "World{" + w.getClass().getPackage().getName() + "." + w.getClass().getSimpleName() + "}";
     }
 
     @Override
-    public Location getLocation() {
-        return b.getLocation();
+    public Location getSpawnLocation() {
+        return w.getSpawnLocation();
+    }
+
+    @Override
+    public void setSpawnLocation() {
+        w.setSpawnLocation();
+    }
+
+    @Override
+    public String getName() {
+        return w.getName();
     }
 
 }
