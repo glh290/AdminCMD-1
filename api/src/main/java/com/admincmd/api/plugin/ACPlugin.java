@@ -18,6 +18,7 @@
  */
 package com.admincmd.api.plugin;
 
+import com.admincmd.api.commands.CommandRegistry;
 import java.io.File;
 
 /**
@@ -31,5 +32,7 @@ public interface ACPlugin {
     public File getDataFolder();
 
     public ServerSoftware getServerSoftware();
+    
+    public CommandRegistry getCommandRegistry(); 
 
 }

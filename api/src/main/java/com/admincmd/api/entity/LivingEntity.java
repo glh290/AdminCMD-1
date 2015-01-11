@@ -18,25 +18,16 @@
  */
 package com.admincmd.api.entity;
 
-import com.admincmd.api.commands.CommandSender;
-import java.util.UUID;
+import com.admincmd.api.world.Location;
 
-public abstract class Player implements Entity, CommandSender, LivingEntity {
+/**
+ * <strong>Project:</strong> api <br>
+ * <strong>File:</strong> LivingEntity.java
+ *
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public interface LivingEntity extends Entity {
 
-    private final UUID uuid;
-    private final String name;
-
-    public Player(UUID uuid, String name) {
-        this.uuid = uuid;
-        this.name = name;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
- 
+    public void teleport(Location newLoc);
+    
 }

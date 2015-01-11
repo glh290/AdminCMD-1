@@ -16,14 +16,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.plugin.events.weather;
+package com.admincmd.core.commands;
 
-import com.admincmd.api.world.Weather;
+import com.admincmd.api.plugin.ServerSoftware;
+import com.admincmd.core.AdminCMD;
+import com.admincmd.core.util.reflection.Reflector;
 
-public class WeatherChangeEvent extends WeatherEvent {
-
-    public WeatherChangeEvent(Weather w) {
-        super(w);
-    }
+/**
+ * <strong>Project:</strong> core <br>
+ * <strong>File:</strong> CommandHandler.java
+ *
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public class CommandHandler {
 
 }

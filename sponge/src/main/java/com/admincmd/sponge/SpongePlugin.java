@@ -18,6 +18,7 @@
  */
 package com.admincmd.sponge;
 
+import com.admincmd.api.commands.CommandRegistry;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.AdminCMD;
@@ -37,34 +38,39 @@ import org.spongepowered.api.util.event.Subscribe;
  */
 @Plugin(id = "AC", name = "AdminCMD", version = "1.0.0")
 public class SpongePlugin implements ACPlugin {
-    
+
     private Game game;
-    
+
     @Subscribe
     public void onPreInitialization(PreInitializationEvent event) {
         AdminCMD.registerACPlugin(this);
         AdminCMD.onEnable();
-        
+
     }
-    
+
     @Subscribe
     public void onServerStarting(ServerStartingEvent event) {
     }
-    
+
     @Subscribe
     public void onServerStopping(ServerStoppingEvent event) {
         AdminCMD.onDisable();
     }
-    
+
     @Override
     public File getDataFolder() {
         File folder = new File(".//" + File.separator + "AdminCMD");
         folder.mkdirs();
         return folder;
     }
-    
+
     @Override
     public ServerSoftware getServerSoftware() {
         return ServerSoftware.SPONGE;
+    }
+
+    @Override
+    public CommandRegistry getCommandRegistry() {
+        return null;
     }
 }

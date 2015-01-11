@@ -16,25 +16,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.plugin.events.weather;
+package com.admincmd.api.commands;
 
-import com.admincmd.api.event.Event;
-import com.admincmd.api.world.Weather;
+/**
+ * <strong>Project:</strong> api <br>
+ * <strong>File:</strong> CommandRegistry.java
+ * 
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public interface CommandRegistry {
 
-public abstract class WeatherEvent implements Event {
-
-    private Weather w;
-
-    public WeatherEvent(Weather w) {
-        this.w = w;
-    }
-
-    public Weather getWeather() {
-        return w;
-    }
-
-    public void setWeather(Weather w) {
-        this.w = w;
-    }
-
+    
+    public void registerClass(Class<?> clazz);
+    
 }

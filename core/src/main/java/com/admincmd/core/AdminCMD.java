@@ -50,6 +50,8 @@ public class AdminCMD {
         ACWorld world = new ACWorld();
         String s = world.getName();
         ACLogger.info(world.toString());
+
+        //acp.getCommandRegistry().registerClass(null);
     }
 
     public static void onDisable() {

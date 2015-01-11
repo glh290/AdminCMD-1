@@ -19,6 +19,10 @@
 package com.admincmd.bukkit.entity;
 
 import com.admincmd.api.entity.Player;
+import com.admincmd.api.world.Location;
+import com.admincmd.bukkit.tools.Converter;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 
 /**
  * <strong>Project:</strong> bukkit <br>
@@ -26,6 +30,28 @@ import com.admincmd.api.entity.Player;
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class IPlayer implements Player {
-
+public class IPlayer extends Player {
+    
+    private final org.bukkit.entity.Player bPlayer;
+    
+    public IPlayer(UUID uuid, String name) {
+        super(uuid, name);
+        bPlayer = Bukkit.getPlayer(uuid);
+    }
+    
+    @Override
+    public void sendMessage(String msg) {
+        bPlayer.sendMessage(msg);
+    }
+    
+    @Override
+    public Location getLocation() {
+        return Converter.transformLocation(bPlayer.getLocation());
+    }
+    
+    @Override
+    public void teleport(Location newLoc) {
+        bPlayer.teleport(Converter.transformLocation(newLoc));
+    }
+    
 }

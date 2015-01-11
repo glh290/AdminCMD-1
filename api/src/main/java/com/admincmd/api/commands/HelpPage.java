@@ -20,8 +20,6 @@ package com.admincmd.api.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 
 /**
  * <strong>Project:</strong> api <br>
@@ -45,11 +43,11 @@ public class HelpPage {
     
     public void prepare() {
         if (helpPages == null || helpPages.isEmpty()) return;
-        HELP_TEXT.add(ChatColor.GREEN + "------------------------" + ChatColor.BLUE + "Help" + ChatColor.GREEN + "-------------------------");
+        HELP_TEXT.add("§a------------------------§1Help§a-------------------------");
         for (CommandHelp ch : helpPages) {
-            HELP_TEXT.add(ChatColor.GOLD + "/" + ch.getText());
+            HELP_TEXT.add("§6/" + ch.getText());
         }
-        HELP_TEXT.add(ChatColor.GREEN + "-----------------------------------------------------");
+        HELP_TEXT.add("§a-----------------------------------------------------");
     }
     
     public boolean sendHelp(CommandSender s, CommandArgs args) {
@@ -67,7 +65,7 @@ public class HelpPage {
         private final String FULL_TEXT;
         
         public CommandHelp(String cmd, String description) {
-            this.FULL_TEXT = ChatColor.GOLD + cmd + ChatColor.GRAY + " - " + description;
+            this.FULL_TEXT = "§6" + cmd + "§7" + " - " + description;
         }
         
         public String getText() {

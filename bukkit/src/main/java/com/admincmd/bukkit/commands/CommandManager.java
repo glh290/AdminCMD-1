@@ -22,6 +22,7 @@ import com.admincmd.api.commands.BaseCommand;
 import com.admincmd.api.commands.BaseCommand.Sender;
 import com.admincmd.api.commands.CommandArgs;
 import com.admincmd.api.commands.CommandHandler;
+import com.admincmd.api.commands.CommandRegistry;
 import com.admincmd.api.commands.CommandResult;
 import com.admincmd.api.commands.MethodContainer;
 import java.lang.reflect.Field;
@@ -45,7 +46,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class CommandManager implements CommandExecutor {
+public class CommandManager implements CommandExecutor, CommandRegistry {
 
     private final HashMap<BaseCommand, MethodContainer> cmds = new HashMap<>();
     private final CommandMap cmap;
@@ -109,6 +110,7 @@ public class CommandManager implements CommandExecutor {
      *
      * @param clazz the classfile where your command /-s are stored.
      */
+    @Override
     public void registerClass(Class<?> clazz) {
         if (!clazz.isAnnotationPresent(CommandHandler.class)) {
             plugin.getLogger().severe("Class is not a CommandHandler");

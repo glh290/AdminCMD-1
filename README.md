@@ -74,6 +74,7 @@ So always prefix your commit message with one of these tags:
 5. [DEV] : Something only related to development
 6. [DEBUG] : Related to help the debugging.
 7. [IGNORE] : Related to the .gitignore file
+8. [API] : Work on the API
 
 If you have already commited something, but want to add another commit, 
 just type ```git commit -amend```

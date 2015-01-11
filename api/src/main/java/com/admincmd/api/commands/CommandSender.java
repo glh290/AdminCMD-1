@@ -16,27 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.entity;
+package com.admincmd.api.commands;
 
-import com.admincmd.api.commands.CommandSender;
-import java.util.UUID;
-
-public abstract class Player implements Entity, CommandSender, LivingEntity {
-
-    private final UUID uuid;
-    private final String name;
-
-    public Player(UUID uuid, String name) {
-        this.uuid = uuid;
-        this.name = name;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
- 
+/**
+ * <strong>Project:</strong> api <br>
+ * <strong>File:</strong> CommandSender.java
+ * 
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
+public interface CommandSender {
+    
+    public void sendMessage(String msg);
+    
 }

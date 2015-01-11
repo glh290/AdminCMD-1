@@ -18,6 +18,9 @@
  */
 package com.admincmd.sponge.entity;
 
+import com.admincmd.api.entity.Player;
+import com.admincmd.api.world.Location;
+import java.util.UUID;
 
 /**
  * <strong>Project:</strong> sponge <br>
@@ -25,6 +28,23 @@ package com.admincmd.sponge.entity;
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class IPlayer implements com.admincmd.api.entity.Player {
+public class IPlayer extends Player {
+
+    public IPlayer(UUID uuid, String name) {
+        super(uuid, name);
+    }
+
+    @Override
+    public void sendMessage(String msg) {
+    }
+
+    @Override
+    public Location getLocation() {
+        return null;
+    }
+
+    @Override
+    public void teleport(Location newLoc) {
+    }
 
 }

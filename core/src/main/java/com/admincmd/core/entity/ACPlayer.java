@@ -19,7 +19,10 @@
 package com.admincmd.core.entity;
 
 import com.admincmd.api.entity.Player;
+import com.admincmd.api.world.Location;
 import com.admincmd.core.util.reflection.Reflector;
+import java.lang.reflect.InvocationTargetException;
+import java.util.UUID;
 
 /**
  * <strong>Project:</strong> core <br>
@@ -27,18 +30,34 @@ import com.admincmd.core.util.reflection.Reflector;
  * 
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class ACPlayer implements Player {
+public class ACPlayer extends Player {
     
     private Player p;
     
-    public ACPlayer() {
+    public ACPlayer(UUID uuid, String name) {
+        super(uuid, name);
         try {
             Class<?> clazz = Reflector.getSoftwareClass(".entity.IPlayer");          
-            Object o = clazz.newInstance();
+            Object o = clazz.getConstructor(UUID.class, String.class).newInstance(uuid, name);
             p = (Player) o;
-        } catch (InstantiationException | IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void sendMessage(String msg) {
+        p.sendMessage(msg);
+    }
+
+    @Override
+    public Location getLocation() {
+        return p.getLocation();
+    }
+
+    @Override
+    public void teleport(Location newLoc) {
+        p.teleport(newLoc);
     }
 
 }

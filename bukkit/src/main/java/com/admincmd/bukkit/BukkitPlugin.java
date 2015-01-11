@@ -18,9 +18,10 @@
  */
 package com.admincmd.bukkit;
 
-import com.admincmd.core.Config;
+import com.admincmd.api.commands.CommandRegistry;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
+import com.admincmd.bukkit.commands.CommandManager;
 import com.admincmd.core.AdminCMD;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,6 +32,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
 public class BukkitPlugin extends JavaPlugin implements ACPlugin {
+
+    private final CommandManager manager = new CommandManager(this);
 
     @Override
     public void onEnable() {
@@ -46,5 +49,10 @@ public class BukkitPlugin extends JavaPlugin implements ACPlugin {
     @Override
     public ServerSoftware getServerSoftware() {
         return ServerSoftware.BUKKIT;
+    }
+
+    @Override
+    public CommandRegistry getCommandRegistry() {
+        return this.manager;
     }
 }

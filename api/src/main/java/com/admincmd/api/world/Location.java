@@ -23,15 +23,15 @@ public class Location {
     private double x;
     private double y;
     private double z;
-    private double yaw;
-    private double pitch;
+    private float yaw;
+    private float pitch;
     private World world;
 
     public Location(double x, double y, double z, World w) {
         this(x, y, z, 0, 0, w);
     }
 
-    public Location(double x, double y, double z, double yaw, double pitch, World w) {
+    public Location(double x, double y, double z, float yaw, float pitch, World w) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -52,11 +52,11 @@ public class Location {
         return z;
     }
 
-    public double getYaw() {
+    public float getYaw() {
         return yaw;
     }
 
-    public double getPitch() {
+    public float getPitch() {
         return pitch;
     }
 
@@ -76,12 +76,17 @@ public class Location {
         this.z = z;
     }
 
-    public void setYaw(double yaw) {
+    public void setYaw(float yaw) {
         this.yaw = yaw;
     }
 
-    public void setPitch(double pitch) {
+    public void setPitch(float pitch) {
         this.pitch = pitch;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getPackage().getName() + "." + getClass().getName() + "{" + "x=" + x + ";y=" + y + ";z=" + z + "world=" + world.getName() + "}";
     }
 
 }
