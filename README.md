@@ -67,14 +67,17 @@ If you make a commit, use the tags below in your commit. For example:
 
 So always prefix your commit message with one of these tags:
 
-1. [MOD] : You have modified something in the existing code
-2. [ADD] : You've added something new to the code
-3. [FIX] : Fixed a problem/bug
-4. [OPTIMIZATION] : Some optimization done in the code
-5. [DEV] : Something only related to development
-6. [DEBUG] : Related to help the debugging.
-7. [IGNORE] : Related to the .gitignore file
-8. [API] : Work on the API
+* [MOD] : You have modified something in the existing code
+* [ADD] : You've added something new to the code
+* [FIX] : Fixed a problem/bug
+* [OPTIMIZATION] : Some optimization done in the code
+* [DEV] : Something only related to development
+* [DEBUG] : Related to help the debugging.
+* [IGNORE] : Related to the .gitignore file
+* [API] : Work on the API module
+* [BUKKIT] : Work on the Bukkit module
+* [SPONGE] : Work on the sponge module
+* [CORE] : Work on the core module
 
 If you have already commited something, but want to add another commit, 
 just type ```git commit -amend```
