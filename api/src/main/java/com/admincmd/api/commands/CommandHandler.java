@@ -23,10 +23,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <strong>Project:</strong> api <br>
+ * <strong>File:</strong> CommandHandler.java
+ *
+ * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
+ */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Command {
-
-    String name();
+@Target(ElementType.TYPE)
+public @interface CommandHandler {
 
 }

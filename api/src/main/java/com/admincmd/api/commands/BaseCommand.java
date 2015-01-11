@@ -16,18 +16,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.addon;
+package com.admincmd.api.commands;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * <strong>Project:</strong> api <br>
- * <strong>File:</strong> Addon.java
+ * <strong>File:</strong> BaseCommand.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public abstract class Addon {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface BaseCommand {
 
-    public Addon() {
-        
+    public enum Sender {
+
+        PLAYER,
+        CONSOLE;
     }
+
+    Sender sender();
+
+    String command();
+
+    String permission() default "";
+
+    String subCommand() default "";
+    
+    String aliases() default "";
 
 }

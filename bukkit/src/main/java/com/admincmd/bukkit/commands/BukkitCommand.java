@@ -18,25 +18,43 @@
  */
 package com.admincmd.bukkit.commands;
 
-import com.admincmd.api.commands.Command;
-import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.List;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
 /**
  * <strong>Project:</strong> bukkit <br>
  * <strong>File:</strong> BukkitCommand.java
- * 
+ *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class BukkitCommand implements Command {
+public class BukkitCommand extends Command {
 
-    @Override
-    public String name() {
-        return null;
+    private CommandExecutor exe = null;
+    private final List<String> aliases;
+
+    protected BukkitCommand(String name, List<String> aliases) {
+        super(name);
+        this.aliases = aliases;
     }
 
     @Override
-    public Class<? extends Annotation> annotationType() {
-        return null;
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        if (exe != null) {
+            exe.onCommand(sender, this, commandLabel, args);
+        }
+        return false;
+    }
+
+    public void setExecutor(CommandExecutor exe) {
+        this.exe = exe;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Collections.unmodifiableList(aliases);
     }
 
 }

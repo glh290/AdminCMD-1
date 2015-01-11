@@ -16,18 +16,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.addon;
+package com.admincmd.api.commands;
 
 /**
  * <strong>Project:</strong> api <br>
- * <strong>File:</strong> Addon.java
+ * <strong>File:</strong> CommandResult.java
  *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public abstract class Addon {
+public enum CommandResult {
 
-    public Addon() {
-        
+    SUCCESS(null),
+    NO_PERMISSION("§4[ERROR] §7You don't have permission to do that! §c(%perm%)"),
+    NO_PERMISSION_OTHER("§4[ERROR] §7You don't have permission to do that! §c(%perm%.other)"),
+    ERROR("§c[ERROR] §7Wrong usage! Please use §6/%cmd% help §7 to see the correct usage!"),
+    ONLY_PLAYER("§c[ERROR] §7This command is only for players!"),
+    NOT_ONLINE("§c[ERROR] §7That player is not online."),
+    NOT_A_NUMBER("§c[ERROR] §7This is not a number!");
+
+    private final String msg;
+
+    CommandResult(String msg) {
+        this.msg = msg;
     }
 
+    public String getMessage() {
+        return this.msg;
+    }
 }

@@ -16,27 +16,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.sponge.commands;
+package com.admincmd.api.commands;
 
-import com.admincmd.api.commands.Command;
-import java.lang.annotation.Annotation;
+import com.admincmd.api.commands.BaseCommand.Sender;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
- * <strong>Project:</strong> sponge <br>
- * <strong>File:</strong> SpongeCommand.java
- * 
+ * <strong>Project:</strong> api <br>
+ * <strong>File:</strong> MethodContainer.java
+ *
  * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
  */
-public class SpongeCommand implements Command {
+public class MethodContainer {
 
-    @Override
-    public String name() {
-        return null;
+    private final HashMap<Sender, Method> methods;
+
+    public MethodContainer(HashMap<Sender, Method> map) {
+        methods = map;
     }
 
-    @Override
-    public Class<? extends Annotation> annotationType() {
-        return null;
+    public Method getMethod(Sender s) {
+        return methods.get(s);
     }
 
+    public Collection<Method> getMethods() {
+        return methods.values();
+    }
+
+    public HashMap<Sender, Method> getMethodMap() {
+        return methods;
+    }
+    
 }
