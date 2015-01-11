@@ -36,7 +36,8 @@ public enum Config {
     MYSQL_PORT("MySQL.Port", 3306, "The port of the MySQL server"),
     MYSQL_DATABASE("MySQL.Database", "minecraft", "The name of the dataabse"),
     MYSQL_USER("MySQL.User", "root", "The user of the database"),
-    MYSQL_PASSWORD("MySQL.Password", "password", "The password of the user");
+    MYSQL_PASSWORD("MySQL.Password", "password", "The password of the user"),
+    DEBUG("Options.Debug", false, "Enables debugging chat.");
 
     private Config(String path, Object val, String description) {
         this.path = path;

@@ -18,6 +18,14 @@
  */
 package com.admincmd.core.util.loggers;
 
+import com.admincmd.core.AdminCMD;
+import com.admincmd.core.Config;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +36,7 @@ public class ACLogger {
 
     /**
      * Logs information to console
-     * 
+     *
      * @param message The message to log
      */
     public static void info(final String message) {
@@ -37,7 +45,7 @@ public class ACLogger {
 
     /**
      * Logs warnings to console
-     * 
+     *
      * @param message The warning to log
      */
     public static void warn(final String message) {
@@ -46,7 +54,7 @@ public class ACLogger {
 
     /**
      * Logs errors to console
-     * 
+     *
      * @param message The error to log
      */
     public static void severe(final String message) {
@@ -55,7 +63,7 @@ public class ACLogger {
 
     /**
      * Logs errors and exceptions to console
-     * 
+     *
      * @param message The error to log
      * @param ex The exception to log
      */
@@ -65,25 +73,85 @@ public class ACLogger {
 
     /**
      * Logs debug messages to console
-     * 
-     * (Eventually, this can be written to file)
-     * 
+     *
      * @param message The debug message to log
      */
     public static void debug(final String message) {
+        if (!Config.DEBUG.getBoolean()) return;
         logger.log(Level.INFO, PREFIX + message);
+        writeToDebug(message);
     }
 
     /**
      * Logs debug messages and exceptions to console
-     * 
-     * (Eventually, this can be written to file)
-     * 
+     *
      * @param message The debug message to log
      * @param ex The exception to log
      */
     public static void debug(final String message, final Throwable ex) {
+        if (!Config.DEBUG.getBoolean()) return;
         logger.log(Level.INFO, PREFIX + message, ex);
+        writeToDebug(message, ex);
+    }
+
+    private static String prefix() {
+        DateFormat date = new SimpleDateFormat("[dd-MM-yyyy HH:mm:ss] ");
+        Calendar cal = Calendar.getInstance();
+        return date.format(cal.getTime());
+    }
+
+    private static void writeToDebug(String message) {
+        BufferedWriter bw = null;
+        File file = new File(AdminCMD.getACPlugin().getDataFolder(), "logs");
+        file.mkdirs();
+        try {
+            bw = new BufferedWriter(new FileWriter(file + File.separator + "debug.log", true));
+            bw.write(prefix() + ": " + message);
+            bw.newLine();
+        } catch (Exception ex) {
+        } finally {
+            try {
+                if (bw != null) {
+                    bw.flush();
+                    bw.close();
+                }
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+    private static void writeToDebug(String message, Throwable t) {
+        BufferedWriter bw = null;
+        File file = new File(AdminCMD.getACPlugin().getDataFolder(), "logs");
+        file.mkdirs();
+        try {
+            bw = new BufferedWriter(new FileWriter(file + File.separator + "debug.log", true));
+            bw.write(prefix() + ": An Exception happened!");
+            bw.newLine();
+            bw.write(getStackTrace(t));
+            bw.newLine();
+        } catch (Exception ex) {
+        } finally {
+            try {
+                if (bw != null) {
+                    bw.flush();
+                    bw.close();
+                }
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+    private static String getStackTrace(Throwable t) {
+        String ret = prefix() + ": " + t + ": " + t.getMessage();
+
+        StackTraceElement[] elements = t.getStackTrace();
+
+        for (StackTraceElement element : elements) {
+            ret += "\n" + prefix() + ": " + element;
+        }
+
+        return ret;
     }
 
 }
