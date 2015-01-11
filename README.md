@@ -17,7 +17,12 @@ Featuring the most widely used commands in server management such as: inventory 
 banishment of bad players, limitation to teleporting, setting spawn and home way points, and much, much more! 
 Blockface approved and rated as one of the best plug-in by server owners.
 
-This project is using [Gradle](http://www.gradle.org)
+Developer requirements
+------------
+
+* The Java 7 or newer JDK
+* Maven
+* Git 
 
 Developer Informations
 ------------
@@ -80,6 +85,7 @@ Developers
 * [TheJeterLP](https://github.com/TheJeterLP/)
 * [BossLetsPlays](https://github.com/BossLetsPlays/)
 * [Jkmalan](https://github.com/jkmalan/)
+* [Sheenrox82](https://github.com/sheenrox82/)
 
 Thanks to
 ------------
@@ -89,10 +95,13 @@ Thanks to
 Used IDEs
 ------------
 * [NetBeans](https://netbeans.org) (used by TheJeterLP)
-  * [Gradle Plugin](http://plugins.netbeans.org/plugin/44510/gradle-support)
+  * Built-in Maven support
+  * Built-in Git support
 * [IntelliJ](https://www.jetbrains.com/idea/) (used by Belphemur)
-  * Build-in Gradle support
-* [Eclipse](https://eclipse.org) (used by BossLetsPlays and Jkmalan)
-  * [Gradle Plugin](http://marketplace.eclipse.org/content/gradle-integration-eclipse-44)
+  * Built-in Maven support
+  * Built-in Git support
+* [Eclipse](https://eclipse.org) (used by BossLetsPlays, Jkmalan and Sheenrox82)
+  * [Maven Plugin](http://eclipse.org/m2e/)
+  * [Git Plugin](http://eclipse.org/egit/)
 
 
