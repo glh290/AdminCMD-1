@@ -55,6 +55,7 @@
         <module>sponge</module>
         <module>compile-bukkit</module>
         <module>compile-sponge</module>
+        <module>compile-both</module>
     </modules>
     
     <dependencies>                              
