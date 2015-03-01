@@ -21,17 +21,13 @@ package com.admincmd.bukkit.world;
 import com.admincmd.api.world.Location;
 import com.admincmd.api.world.World;
 
-/**
- * <strong>Project:</strong> bukkit <br>
- * <strong>File:</strong> IWorld.java
- *
- * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
- */
 public class IWorld implements World {
+    
+    public org.bukkit.World w;
 
     @Override
     public Location getSpawnLocation() {
-        return null;
+        return new Location(w.getSpawnLocation().getX(), w.getSpawnLocation().getY(), w.getSpawnLocation().getZ(), this);
     }
 
     @Override

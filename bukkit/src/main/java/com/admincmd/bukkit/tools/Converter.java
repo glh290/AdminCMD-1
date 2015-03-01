@@ -18,6 +18,7 @@
  */
 package com.admincmd.bukkit.tools;
 
+import com.admincmd.api.entity.GameMode;
 import com.admincmd.api.entity.Player;
 import com.admincmd.api.world.Location;
 import com.admincmd.api.world.World;
@@ -25,12 +26,6 @@ import com.admincmd.bukkit.entity.IPlayer;
 import com.admincmd.bukkit.world.IWorld;
 import org.bukkit.Bukkit;
 
-/**
- * <strong>Project:</strong> bukkit <br>
- * <strong>File:</strong> Converter.java
- *
- * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
- */
 public class Converter {
 
     public static Player transformPlayer(org.bukkit.entity.Player p) {
@@ -55,6 +50,16 @@ public class Converter {
     
     public static org.bukkit.World transformWorld(World world) {
         org.bukkit.World ret = Bukkit.getWorld(world.getName());
+        return ret;
+    }
+    
+    public static GameMode transformGameMode(org.bukkit.GameMode mode) {
+        GameMode ret = GameMode.valueOf(mode.toString());
+        return ret;
+    }
+
+    public static org.bukkit.GameMode transformGameMode(GameMode mode) {
+        org.bukkit.GameMode ret = org.bukkit.GameMode.valueOf(mode.toString());
         return ret;
     }
 
