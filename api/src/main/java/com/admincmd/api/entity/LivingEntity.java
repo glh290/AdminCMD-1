@@ -20,14 +20,18 @@ package com.admincmd.api.entity;
 
 import com.admincmd.api.world.Location;
 
-/**
- * <strong>Project:</strong> api <br>
- * <strong>File:</strong> LivingEntity.java
- *
- * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
- */
 public interface LivingEntity extends Entity {
+    
+    public void damage(double amount);
+    
+    public double getHealth();
+    
+    public void setHealth(double health);
 
+    public double getMaxHealth();
+    
+    public void setMaxHealth(double health);
+    
     public void teleport(Location newLoc);
     
 }

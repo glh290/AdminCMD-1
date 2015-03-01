@@ -18,15 +18,10 @@
  */
 package com.admincmd.api.world;
 
-/**
- * <strong>Project:</strong> api <br>
- * <strong>File:</strong> Weather.java
- *
- * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
- */
 public enum Weather {
 
     SUN,
-    RAIN;
+    RAIN,
+    STORM;
 
 }

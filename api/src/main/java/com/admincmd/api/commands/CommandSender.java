@@ -18,12 +18,6 @@
  */
 package com.admincmd.api.commands;
 
-/**
- * <strong>Project:</strong> api <br>
- * <strong>File:</strong> CommandSender.java
- * 
- * @author <a href="http://jpeter.redthirddivision.com">TheJeterLP</a>
- */
 public interface CommandSender {
     
     public void sendMessage(String msg);

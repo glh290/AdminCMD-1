@@ -21,7 +21,7 @@ package com.admincmd.api.entity;
 import com.admincmd.api.commands.CommandSender;
 import java.util.UUID;
 
-public abstract class Player implements Entity, CommandSender, LivingEntity {
+public abstract class Player implements Entity, CommandSender, LivingEntity, HumanEntity {
 
     private final UUID uuid;
     private final String name;
@@ -31,12 +31,24 @@ public abstract class Player implements Entity, CommandSender, LivingEntity {
         this.name = name;
     }
 
-    public UUID getUuid() {
+    public UUID getUUID() {
         return uuid;
     }
 
     public String getName() {
         return name;
     }
+    
+    public abstract boolean getAllowFlight();
+    
+    public abstract String getDisplayName();
+    
+    public abstract GameMode getGameMode();
+    
+    public abstract void setAllowFlight(boolean allow);
+    
+    public abstract void setDisplayName(String name);
+    
+    public abstract void setGameMode(GameMode mode);
  
 }
