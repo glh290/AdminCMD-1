@@ -22,13 +22,14 @@ import com.admincmd.api.commands.CommandRegistry;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.AdminCMD;
+import com.admincmd.core.util.loggers.ACLogger;
 import java.io.File;
 import org.spongepowered.api.Game;
+import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStartingEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.util.event.Subscribe;
 
 /**
  * <strong>Project:</strong> AdminCMD-Core <br>
@@ -46,6 +47,7 @@ public class SpongePlugin implements ACPlugin {
         AdminCMD.registerACPlugin(this);
         AdminCMD.onEnable();
 
+        ACLogger.info("Using Sponge version!");
     }
 
     @Subscribe

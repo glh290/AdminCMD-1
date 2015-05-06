@@ -20,10 +20,8 @@ package com.admincmd.core;
 
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
-import com.admincmd.api.world.World;
 import com.admincmd.core.database.DatabaseFactory;
 import com.admincmd.core.util.loggers.ACLogger;
-import com.admincmd.core.world.ACWorld;
 import java.sql.SQLException;
 
 /**
@@ -48,19 +46,7 @@ public class AdminCMD {
         long start = System.currentTimeMillis();
         Config.load();
         DatabaseFactory.init();
-
-        //debug start
-        try {
-            World w = new ACWorld();
-            String name = w.getName();
-            if (name.equalsIgnoreCase("test")) {
-
-            }
-        } catch (Exception e) {
-            ACLogger.debug("Could not get the world name", e);
-        }
-        //debug stop
-
+        
         //acp.getCommandRegistry().registerClass(null);
         long timeTook = System.currentTimeMillis() - start;
         ACLogger.debug("Plugin start took " + timeTook + " miliseconds");

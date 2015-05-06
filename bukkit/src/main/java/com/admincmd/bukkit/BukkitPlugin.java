@@ -23,6 +23,7 @@ import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.bukkit.commands.CommandManager;
 import com.admincmd.core.AdminCMD;
+import com.admincmd.core.util.loggers.ACLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -39,6 +40,9 @@ public class BukkitPlugin extends JavaPlugin implements ACPlugin {
     public void onEnable() {
         AdminCMD.registerACPlugin(this);
         AdminCMD.onEnable();
+        
+        ACLogger.info("Using Bukkit version!");
+        
     }
 
     @Override

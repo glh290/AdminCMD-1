@@ -49,5 +49,4 @@ public class Reflector {
             return null;
         }
     }
-
 }
