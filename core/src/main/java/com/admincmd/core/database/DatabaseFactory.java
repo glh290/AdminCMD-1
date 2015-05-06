@@ -37,6 +37,7 @@ public class DatabaseFactory {
             DriverManager.registerDriver(new JDBC());
             DriverManager.registerDriver(new Driver());
         } catch (SQLException ex) {
+            ACLogger.debug("Could not register the drivers!", ex);
             ex.printStackTrace();
         }
         

@@ -47,7 +47,6 @@ public class AdminCMD {
         Config.load();
         DatabaseFactory.init();
         
-        //acp.getCommandRegistry().registerClass(null);
         long timeTook = System.currentTimeMillis() - start;
         ACLogger.debug("Plugin start took " + timeTook + " miliseconds");
 

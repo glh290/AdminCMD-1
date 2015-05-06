@@ -21,7 +21,8 @@ package com.admincmd.bukkit;
 import com.admincmd.api.commands.CommandRegistry;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
-import com.admincmd.bukkit.commands.CommandManager;
+import com.admincmd.bukkit.commands.ServerCommands;
+import com.admincmd.bukkit.commands.tools.CommandManager;
 import com.admincmd.core.AdminCMD;
 import com.admincmd.core.util.loggers.ACLogger;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,19 +36,27 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class BukkitPlugin extends JavaPlugin implements ACPlugin {
 
     private final CommandManager manager = new CommandManager(this);
+    private static BukkitPlugin INSTANCE;
 
     @Override
     public void onEnable() {
-        AdminCMD.registerACPlugin(this);
+        INSTANCE = this;
+        AdminCMD.registerACPlugin(INSTANCE);
         AdminCMD.onEnable();
+
+        getCommandRegistry().registerClass(ServerCommands.class);
         
         ACLogger.info("Using Bukkit version!");
-        
+
     }
 
     @Override
     public void onDisable() {
         AdminCMD.onDisable();
+    }
+
+    public static BukkitPlugin getInstance() {
+        return INSTANCE;
     }
 
     @Override
@@ -57,6 +66,6 @@ public class BukkitPlugin extends JavaPlugin implements ACPlugin {
 
     @Override
     public CommandRegistry getCommandRegistry() {
-        return this.manager;
+        return INSTANCE.manager;
     }
 }

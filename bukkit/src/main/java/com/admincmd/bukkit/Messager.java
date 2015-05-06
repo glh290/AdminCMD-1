@@ -16,10 +16,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.commands;
+package com.admincmd.bukkit;
 
-public interface CommandSender {
+import com.admincmd.api.commands.CommandResult;
+import org.bukkit.command.CommandSender;
+
+public class Messager {
+
+    public enum MessageType {
+        INFO("§a[INFO]§7 "),
+        ERROR("§4[ERROR]§7 ");
+            
+        private final String prefix;
+
+        private MessageType(String prefix) {
+            this.prefix = prefix;
+        }
+        
+        public String getPrefix() {
+            return prefix;
+        }
+    }
     
-    public void sendMessage(String msg);
-    
+    public static CommandResult sendMessage(CommandSender s, String message, MessageType type) {
+        s.sendMessage(type.getPrefix() + message);
+        return CommandResult.SUCCESS;
+    }
+
 }

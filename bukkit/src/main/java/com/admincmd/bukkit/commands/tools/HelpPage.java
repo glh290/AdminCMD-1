@@ -16,10 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.admincmd.api.commands;
+package com.admincmd.bukkit.commands.tools;
 
+import com.admincmd.api.commands.CommandArgs;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.command.CommandSender;
 
 /**
  * <strong>Project:</strong> api <br>
