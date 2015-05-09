@@ -23,8 +23,11 @@ import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.bukkit.commands.ServerCommands;
 import com.admincmd.bukkit.commands.tools.CommandManager;
+import com.admincmd.bukkit.events.EventManager;
+import com.admincmd.bukkit.events.PlayerJoinListener;
+import com.admincmd.bukkit.player.PlayerManager;
 import com.admincmd.core.AdminCMD;
-import com.admincmd.core.util.loggers.ACLogger;
+import com.admincmd.core.loggers.ACLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -44,7 +47,9 @@ public class BukkitPlugin extends JavaPlugin implements ACPlugin {
         AdminCMD.registerACPlugin(INSTANCE);
         AdminCMD.onEnable();
 
-        manager.registerClass(ServerCommands.class);
+        PlayerManager.init();
+        registerCommands();
+        registerEvents();
         
         ACLogger.info("Using Bukkit version!");
 
@@ -52,11 +57,21 @@ public class BukkitPlugin extends JavaPlugin implements ACPlugin {
 
     @Override
     public void onDisable() {
+        PlayerManager.save();
+
         AdminCMD.onDisable();
     }
 
     public static BukkitPlugin getInstance() {
         return INSTANCE;
+    }
+    
+    private void registerCommands() {
+        manager.registerClass(ServerCommands.class);
+    }
+    
+    private void registerEvents() {
+        EventManager.registerEvent(PlayerJoinListener.class);
     }
 
     @Override

@@ -22,7 +22,7 @@ import com.admincmd.api.commands.CommandRegistry;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.AdminCMD;
-import com.admincmd.core.util.loggers.ACLogger;
+import com.admincmd.core.loggers.ACLogger;
 import java.io.File;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Subscribe;

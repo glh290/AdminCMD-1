@@ -21,7 +21,7 @@ package com.admincmd.core;
 import com.admincmd.api.plugin.ACPlugin;
 import com.admincmd.api.plugin.ServerSoftware;
 import com.admincmd.core.database.DatabaseFactory;
-import com.admincmd.core.util.loggers.ACLogger;
+import com.admincmd.core.loggers.ACLogger;
 import java.sql.SQLException;
 
 /**

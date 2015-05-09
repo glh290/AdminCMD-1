@@ -21,10 +21,12 @@ package com.admincmd.core.database;
 import com.admincmd.api.database.Database;
 import com.admincmd.core.AdminCMD;
 import com.admincmd.core.Config;
-import com.admincmd.core.util.loggers.ACLogger;
+import com.admincmd.core.loggers.ACLogger;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gjt.mm.mysql.Driver;
 import org.sqlite.JDBC;
 
@@ -49,10 +51,30 @@ public class DatabaseFactory {
         
         if (db.testConnection()) {
             ACLogger.info("The connection was successful!");
+            ACLogger.debug("Creating the tables...");
+            createTables();
         } else {
             ACLogger.severe("Could not connect to the Database!");
         }
         
+    }
+    
+    private static void createTables() {
+        try {
+            String PLAYER_TABLE = "CREATE TABLE IF NOT EXISTS `ac_player` ("
+                    + "`ID` INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                    + "`uuid` varchar(64) NOT NULL,"
+                    + "`god` BOOLEAN,"
+                    + "`invisible` BOOLEAN,"
+                    + "`commandwatcher` BOOLEAN,"
+                    + "`spy` BOOLEAN,"
+                    + "`fly` BOOLEAN,"
+                    + "`muted` BOOLEAN"
+                    + ");";
+            db.executeStatement(PLAYER_TABLE);
+        } catch (SQLException ex) {
+            ACLogger.severe("Error creating the tables!", ex);
+        }
     }
     
     public static Database getDatabase() {
