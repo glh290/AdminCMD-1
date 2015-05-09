@@ -44,7 +44,7 @@ public class PlayerManager {
     public static void init() {
         players.clear();
         try {
-            PreparedStatement s = conn.getPreparedStatement("SELECT `id` FROM `ac_player`");
+            PreparedStatement s = conn.getPreparedStatement("SELECT `uuid` FROM `ac_player`");
             ResultSet rs = s.executeQuery();
             while (rs.next()) {
                 BukkitPlayer p = new BukkitPlayer(rs.getString("uuid"), conn);

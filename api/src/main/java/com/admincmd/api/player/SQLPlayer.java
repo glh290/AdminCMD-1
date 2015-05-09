@@ -30,7 +30,7 @@ public abstract class SQLPlayer {
     private boolean fly, god, invisible, cmdwatcher, spy, muted;
     private int id;
     private Database db;
-    
+
     public SQLPlayer(UUID uuid, Database db) {
         this.db = db;
         this.uuid = uuid;
@@ -38,21 +38,23 @@ public abstract class SQLPlayer {
             PreparedStatement s = db.getPreparedStatement("SELECT * FROM `ac_player` WHERE `uuid` = ?;");
             s.setString(1, uuid.toString());
             ResultSet rs = s.executeQuery();
-            boolean god = rs.getBoolean("god");
-            boolean fly = rs.getBoolean("fly");
-            boolean inv = rs.getBoolean("invisible");
-            boolean cw = rs.getBoolean("commandwatcher");
-            boolean spy = rs.getBoolean("spy");
-            boolean muted = rs.getBoolean("muted");
-            int id = rs.getInt("ID");
+            if (rs.next()) {
+                boolean god = rs.getBoolean("god");
+                boolean fly = rs.getBoolean("fly");
+                boolean inv = rs.getBoolean("invisible");
+                boolean cw = rs.getBoolean("commandwatcher");
+                boolean spy = rs.getBoolean("spy");
+                boolean muted = rs.getBoolean("muted");
+                int id = rs.getInt("ID");
 
-            this.god = god;
-            this.fly = fly;
-            this.invisible = inv;
-            this.cmdwatcher = cw;
-            this.spy = spy;
-            this.muted = muted;
-            this.id = id;
+                this.god = god;
+                this.fly = fly;
+                this.invisible = inv;
+                this.cmdwatcher = cw;
+                this.spy = spy;
+                this.muted = muted;
+                this.id = id;
+            }
 
             db.closeResultSet(rs);
             db.closeStatement(s);
@@ -134,7 +136,5 @@ public abstract class SQLPlayer {
     public UUID getUuid() {
         return uuid;
     }
-    
-    
 
 }
