@@ -44,7 +44,7 @@ public class BukkitPlugin extends JavaPlugin implements ACPlugin {
         AdminCMD.registerACPlugin(INSTANCE);
         AdminCMD.onEnable();
 
-        getCommandRegistry().registerClass(ServerCommands.class);
+        manager.registerClass(ServerCommands.class);
         
         ACLogger.info("Using Bukkit version!");
 

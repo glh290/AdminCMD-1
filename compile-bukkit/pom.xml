@@ -12,7 +12,7 @@
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>AdminCMD-Bukkit</finalName>
-        <plugins>            
+        <plugins>          
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -38,8 +38,8 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-        </plugins>           
+            </plugin>          
+        </plugins>        
     </build>
     
     <dependencies>

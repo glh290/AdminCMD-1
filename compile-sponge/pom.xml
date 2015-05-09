@@ -11,8 +11,8 @@
     
     <build>
         <defaultGoal>clean install</defaultGoal>
-        <finalName>AdminCMD-Sponge</finalName>
-        <plugins>            
+        <finalName>AdminCMD-Sponge</finalName>       
+        <plugins>                  
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

@@ -37,7 +37,7 @@
                     <include>**/*</include>
                 </includes>
             </resource>
-        </resources>    
+        </resources>   
         
         <extensions>
             <extension>

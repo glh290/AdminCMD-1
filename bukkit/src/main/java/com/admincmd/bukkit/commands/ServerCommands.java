@@ -31,7 +31,7 @@ import org.bukkit.plugin.Plugin;
 @CommandHandler
 public class ServerCommands {
 
-    private final HelpPage reload = new HelpPage("reload");
+    private final HelpPage reload = new HelpPage("acreload");
 
     public ServerCommands() {
         reload.addPage("", "Reloads the whole server.");
@@ -39,7 +39,7 @@ public class ServerCommands {
         reload.prepare();
     }
 
-    @BaseCommand(command = "reload", sender = BaseCommand.Sender.CONSOLE)
+    @BaseCommand(command = "acreload", sender = BaseCommand.Sender.CONSOLE)
     public CommandResult executeConsole(CommandSender sender, CommandArgs args) {
         if (reload.sendHelp(sender, args)) {
             return CommandResult.SUCCESS;
@@ -62,7 +62,7 @@ public class ServerCommands {
         }
     }
     
-    @BaseCommand(command = "reload", sender = BaseCommand.Sender.PLAYER, permission = "admincmd.server.reload")
+    @BaseCommand(command = "acreload", sender = BaseCommand.Sender.PLAYER, permission = "admincmd.server.reload")
     public CommandResult executePlayer(CommandSender sender, CommandArgs args) {
         return executeConsole(sender, args);
     }
