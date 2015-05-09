@@ -69,6 +69,9 @@ public class ACLogger {
      */
     public static void severe(final String message, final Throwable ex) {
         logger.log(Level.SEVERE, PREFIX + message, ex);
+        printError(message, ex);
+        
+        
     }
 
     /**
@@ -127,6 +130,30 @@ public class ACLogger {
         try {
             bw = new BufferedWriter(new FileWriter(file + File.separator + "debug.log", true));
             bw.write(prefix() + ": An Exception happened!");
+            bw.newLine();
+            bw.write(getStackTrace(t));
+            bw.newLine();
+        } catch (Exception ex) {
+        } finally {
+            try {
+                if (bw != null) {
+                    bw.flush();
+                    bw.close();
+                }
+            } catch (Exception ex) {
+            }
+        }
+    }
+    
+    private static void printError(String message, Throwable t) {
+        BufferedWriter bw = null;
+        File file = new File(AdminCMD.getACPlugin().getDataFolder(), "logs");
+        file.mkdirs();
+        try {
+            bw = new BufferedWriter(new FileWriter(file + File.separator + "errors.log", true));
+            bw.write(prefix() + ": An Exception happened!");
+            bw.newLine();
+            bw.write(message);
             bw.newLine();
             bw.write(getStackTrace(t));
             bw.newLine();
