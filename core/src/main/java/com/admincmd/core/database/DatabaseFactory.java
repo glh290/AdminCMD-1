@@ -25,15 +25,13 @@ import com.admincmd.core.loggers.ACLogger;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.gjt.mm.mysql.Driver;
 import org.sqlite.JDBC;
 
 public class DatabaseFactory {
-    
+
     private static Database db = null;
-    
+
     public static void init() {
         try {
             DriverManager.registerDriver(new JDBC());
@@ -42,13 +40,13 @@ public class DatabaseFactory {
             ACLogger.debug("Could not register the drivers!", ex);
             ex.printStackTrace();
         }
-        
+
         if (Config.MYSQL_USE.getBoolean()) {
             db = new MySQL(Config.MYSQL_IP.getString(), Config.MYSQL_USER.getString(), Config.MYSQL_PASSWORD.getString(), Config.MYSQL_DATABASE.getString(), Config.MYSQL_PORT.getInteger());
         } else {
             db = new SQLite(new File(AdminCMD.getACPlugin().getDataFolder(), "Database.db"));
         }
-        
+
         if (db.testConnection()) {
             ACLogger.info("The connection was successful!");
             ACLogger.debug("Creating the tables...");
@@ -56,29 +54,43 @@ public class DatabaseFactory {
         } else {
             ACLogger.severe("Could not connect to the Database!");
         }
-        
+
     }
-    
+
     private static void createTables() {
         try {
-            String PLAYER_TABLE = "CREATE TABLE IF NOT EXISTS `ac_player` ("
-                    + "`ID` INTEGER PRIMARY KEY AUTO_INCREMENT,"
-                    + "`uuid` varchar(64) NOT NULL,"
-                    + "`god` BOOLEAN,"
-                    + "`invisible` BOOLEAN,"
-                    + "`commandwatcher` BOOLEAN,"
-                    + "`spy` BOOLEAN,"
-                    + "`fly` BOOLEAN,"
-                    + "`muted` BOOLEAN"
-                    + ");";
+            String PLAYER_TABLE;
+            if (db instanceof SQLite) {
+                PLAYER_TABLE = "CREATE TABLE IF NOT EXISTS `ac_player` ("
+                        + "`ID` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                        + "`uuid` varchar(64) NOT NULL,"
+                        + "`god` BOOLEAN,"
+                        + "`invisible` BOOLEAN,"
+                        + "`commandwatcher` BOOLEAN,"
+                        + "`spy` BOOLEAN,"
+                        + "`fly` BOOLEAN,"
+                        + "`muted` BOOLEAN"
+                        + ");";
+            } else {
+                PLAYER_TABLE = "CREATE TABLE IF NOT EXISTS `ac_player` ("
+                        + "`ID` INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                        + "`uuid` varchar(64) NOT NULL,"
+                        + "`god` BOOLEAN,"
+                        + "`invisible` BOOLEAN,"
+                        + "`commandwatcher` BOOLEAN,"
+                        + "`spy` BOOLEAN,"
+                        + "`fly` BOOLEAN,"
+                        + "`muted` BOOLEAN"
+                        + ");";
+            }
             db.executeStatement(PLAYER_TABLE);
         } catch (SQLException ex) {
             ACLogger.severe("Error creating the tables!", ex);
         }
     }
-    
+
     public static Database getDatabase() {
         return db;
     }
-    
+
 }

@@ -26,6 +26,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -83,8 +85,24 @@ public class PlayerManager {
     }
     
     public static void insert(Player p) {
-        BukkitPlayer bp = new BukkitPlayer(p, conn);
-        players.put(bp.getUuid(), bp);
+        
+        try {
+            PreparedStatement s = conn.getPreparedStatement("INSERT INTO `ac_player` (`uuid`, `god`, `invisible`, `commandwatcher`, `spy`, `fly`, `muted`) VALUES (?, ?, ?, ?, ?, ?, ?);");
+            s.setString(1, p.getUniqueId().toString());
+            s.setBoolean(2, false);
+            s.setBoolean(3, false);
+            s.setBoolean(4, false);
+            s.setBoolean(5, false);
+            s.setBoolean(6, false);
+            s.setBoolean(7, false);
+            s.executeUpdate();
+            conn.closeStatement(s);
+            
+            BukkitPlayer bp = new BukkitPlayer(p, conn);
+            players.put(bp.getUuid(), bp);
+        } catch (SQLException ex) {
+            ACLogger.severe("Error creating the player!", ex);
+        }
     }
     
     public static boolean hasPlayedBefore(OfflinePlayer p) {

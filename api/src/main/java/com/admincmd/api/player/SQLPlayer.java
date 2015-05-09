@@ -29,7 +29,7 @@ public abstract class SQLPlayer {
     private final UUID uuid;
     private boolean fly, god, invisible, cmdwatcher, spy, muted;
     private int id;
-    private final Database db;
+    private Database db;
     
     public SQLPlayer(UUID uuid, Database db) {
         this.db = db;
